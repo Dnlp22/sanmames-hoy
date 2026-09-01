@@ -1,0 +1,21 @@
+{
+  "name": "San Mamés Hoy",
+  "short_name": "SanMamésHoy",
+  "description": "Toda la actualidad del Athletic en un solo lugar",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F3F1EA",
+  "theme_color": "#E3241A",
+  "icons": [
+    {
+      "src": "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/192px-Club_Athletic_Bilbao_logo.svg.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/512px-Club_Athletic_Bilbao_logo.svg.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
