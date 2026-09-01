@@ -27,12 +27,13 @@
         .stripes span { flex: 1; }
         .stripes span:nth-child(odd) { background: var(--red); }
         .stripes span:nth-child(even) { background: #fff; }
-        .masthead-inner { max-width: 1100px; margin: 0 auto; padding: 25px 20px; cursor: pointer; }
-        .brand { color: #fff; margin: 0; font-size: clamp(28px, 7vw, 42px); line-height: 0.9; text-transform: uppercase; }
+        .masthead-inner { max-width: 1100px; margin: 0 auto; padding: 25px 20px; cursor: pointer; display: flex; align-items: center; gap: 20px; }
+        .brand-logo { height: 70px; width: auto; }
+        .brand { color: #fff; margin: 0; font-size: clamp(24px, 6vw, 42px); line-height: 0.9; text-transform: uppercase; }
         .brand em { color: var(--red); font-style: normal; }
         .brand-sub { color: #A9A498; font-size: 11px; letter-spacing: 1.2px; margin-top: 8px; text-transform: uppercase; font-weight: 600; }
 
-        /* Layout */
+        /* Layout Dos Columnas */
         .main-wrapper { max-width: 1100px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 280px; gap: 40px; }
 
         /* Sidebar */
@@ -61,12 +62,11 @@
         .chip { background: #fff; border: 1px solid var(--line); padding: 6px 14px; border-radius: 20px; font-size: 11px; cursor: pointer; text-transform: uppercase; }
         .chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
 
-        /* Listados */
+        /* Estilo Noticias */
         .story-group { border-bottom: 1px solid var(--line); padding: 20px 0; animation: fadeIn 0.3s ease; }
         .story-main { display: grid; grid-template-columns: 140px 1fr; gap: 20px; }
         .item-thumb { width: 140px; height: 140px; object-fit: cover; border-radius: 4px; background: var(--paper-dim); border: 1px solid var(--line); }
         .item-thumb.is-logo { background: #fff; object-fit: contain; padding: 15px; }
-        
         .item-meta { font-size: 11px; color: var(--steel); text-transform: uppercase; margin-bottom: 5px; font-family: 'Oswald'; }
         .item-meta b { color: var(--red); font-weight: 700; letter-spacing: 0.5px; }
         .story-title { font-size: 20px; font-weight: 600; line-height: 1.2; margin: 0 0 10px; }
@@ -74,21 +74,27 @@
         
         audio { width: 100%; height: 35px; margin-top: 10px; }
 
-        /* Botón Ver Más */
-        .load-more-container { text-align: center; padding: 30px 0; }
+        /* Paginación */
+        .load-more-container { text-align: center; padding: 40px 0; }
         .btn-more { background: var(--red); color: #fff; border: none; padding: 12px 30px; cursor: pointer; font-weight: 700; border-radius: 2px; text-transform: uppercase; font-size: 13px; transition: 0.2s; }
         .btn-more:hover { background: var(--red-dark); }
 
-        /* Widgets */
         .centered-widget-box { background: #fff; padding: 20px 10px; border-radius: 8px; border: 1px solid var(--line); text-align: center; }
+
+        /* Footer */
+        .site-footer { margin-top: 50px; padding: 60px 20px; border-top: 1px solid var(--line); text-align: center; background: #fff; }
+        .footer-content { max-width: 800px; margin: 0 auto; font-family: 'Oswald', sans-serif; }
+        .footer-links { display: flex; justify-content: center; gap: 30px; margin-top: 20px; flex-wrap: wrap; }
+        .footer-links a { color: var(--red); text-decoration: none; font-weight: 600; text-transform: uppercase; font-size: 14px; }
+        .footer-links a:hover { color: var(--ink); }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         @media (max-width: 850px) {
             .main-wrapper { grid-template-columns: 1fr; }
             .sidebar { position: static; }
-            .story-main { grid-template-columns: 100px 1fr; }
-            .item-thumb { width: 100px; height: 100px; }
+            .masthead-inner { flex-direction: column; text-align: center; }
+            .brand-logo { height: 60px; }
         }
     </style>
 </head>
@@ -97,8 +103,11 @@
 <div class="masthead">
     <div class="stripes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
     <div class="masthead-inner" onclick="showSection('titulares')">
-        <h1 class="brand">SAN MAMÉS <em>HOY</em></h1>
-        <div class="brand-sub">TODAS LAS NOTICIAS DEL ATHLETIC EN UN SOLO LUGAR</div>
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/250px-Club_Athletic_Bilbao_logo.svg.png" class="brand-logo" alt="Athletic Club Logo">
+        <div>
+            <h1 class="brand">SAN MAMÉS <em>HOY</em></h1>
+            <div class="brand-sub">TODAS LAS NOTICIAS DEL ATHLETIC EN UN SOLO LUGAR</div>
+        </div>
     </div>
 </div>
 
@@ -106,24 +115,42 @@
     <main>
         <!-- SECCIÓN TITULARES -->
         <section id="sec-titulares" class="content-section active">
-            <div class="toolbar"><h2>Titulares</h2><button style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updateNews(true)">Actualizar</button></div>
+            <div class="toolbar"><h2>Última Hora</h2><button style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updateNews(true)">Actualizar</button></div>
+            <div id="newsListHome"></div>
+            <div class="load-more-container">
+                <button class="btn-more" onclick="showSection('noticias')">Ver más noticias (Hemeroteca)</button>
+            </div>
+        </section>
+
+        <!-- HEMEROTECA COMPLETA -->
+        <section id="sec-noticias" class="content-section">
+            <div class="toolbar"><h2>Hemeroteca</h2></div>
             <div class="chips-container" id="newsChips"></div>
-            <div id="newsList"></div>
-            <div class="load-more-container" id="newsMoreBtn">
-                <button class="btn-more" onclick="increaseNewsLimit()">Ver más noticias</button>
+            <div id="fullNewsList"></div>
+            <div class="load-more-container" id="newsLoadMoreBtn">
+                <button class="btn-more" onclick="increaseNewsLimit()">Cargar noticias anteriores</button>
             </div>
         </section>
 
         <!-- SECCIÓN PODCASTS -->
         <section id="sec-podcasts" class="content-section">
             <div class="toolbar"><h2>Podcasts</h2><button style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updatePodcasts(true)">Actualizar</button></div>
+            <div id="podcastListHome"></div>
+            <div class="load-more-container">
+                <button class="btn-more" onclick="showSection('radio')">Ver más audios (Archivo)</button>
+            </div>
+        </section>
+
+        <!-- ARCHIVO RADIO COMPLETO -->
+        <section id="sec-radio" class="content-section">
+            <div class="toolbar"><h2>Archivo de Radio</h2></div>
             <div class="chips-container" id="podcastChips"></div>
             <div id="bilboPlayerContainer" style="display:none; margin-bottom:20px; background:#fff; padding:10px; border-radius:8px; border:1px solid var(--line);">
                 <iframe src="https://www.ivoox.com/player_es_podcast_721276_zp_1.html?c1=800506" width="100%" height="400" frameborder="0" allowfullscreen="" scrolling="no" loading="lazy"></iframe>
             </div>
-            <div id="podcastList"></div>
-            <div class="load-more-container" id="podMoreBtn">
-                <button class="btn-more" onclick="increasePodLimit()">Ver más episodios</button>
+            <div id="fullPodcastList"></div>
+            <div class="load-more-container" id="podLoadMoreBtn">
+                <button class="btn-more" onclick="increasePodLimit()">Cargar audios anteriores</button>
             </div>
         </section>
 
@@ -154,15 +181,28 @@
             <div class="nav-item" data-sec="partidos" onclick="showSection('partidos')">Partidos</div>
         </div>
         <div class="sidebar-box" id="newsManagerBox">
-            <h3>Medios (Noticias)</h3>
+            <h3>Gestionar Medios</h3>
             <div id="newsManager"></div>
         </div>
         <div class="sidebar-box" id="podcastManagerBox" style="display:none;">
-            <h3>Radio (Podcasts)</h3>
+            <h3>Gestionar Radio</h3>
             <div id="podcastManager"></div>
         </div>
     </aside>
 </div>
+
+<footer class="site-footer">
+    <div class="footer-content">
+        <p>SAN MAMÉS HOY · Agregador de noticias independiente para aficionados del Athletic Club.</p>
+        <div class="footer-links">
+            <a href="mailto:athletic4k@gmail.com">athletic4k@gmail.com</a>
+            <a href="https://www.youtube.com/@HistoriaATH" target="_blank">YouTube: HistoriaATH</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Vercel Analytics -->
+<script defer src="/_vercel/insights/script.js"></script>
 
 <script>
     const LOGOS = {
@@ -216,7 +256,9 @@
             return Array.from(xml.querySelectorAll(isAtom ? 'entry' : 'item')).map(n => {
                 let img = s.useLogo ? LOGOS[s.id] : null;
                 if (!s.useLogo) {
-                    img = n.getElementsByTagNameNS("*", "content")[0]?.getAttribute('url') || n.querySelector('enclosure')?.getAttribute('url');
+                    img = n.getElementsByTagNameNS("*", "content")[0]?.getAttribute('url') || 
+                          n.getElementsByTagNameNS("*", "thumbnail")[0]?.getAttribute('url') ||
+                          n.querySelector('enclosure')?.getAttribute('url');
                     if(!img) {
                         const blob = n.querySelector('description, summary, content')?.textContent || '';
                         const match = blob.match(/src="([^">]+\.(?:jpg|jpeg|png|webp|gif))"/i);
@@ -237,14 +279,16 @@
     function renderNewsData() {
         let filtered = allNews.filter(i => newsSources.find(s => s.name === i.source && s.enabled));
         if (activeNewsFilter !== 'ALL') filtered = filtered.filter(i => i.source === activeNewsFilter);
-        
-        document.getElementById('newsList').innerHTML = filtered.slice(0, newsLimit).map(item => `
-            <article class="story-group"><div class="story-main">
-                <img src="${item.image || 'https://via.placeholder.com/140?text=ATHLETIC'}" class="item-thumb ${item.isLogo ? 'is-logo' : ''}" onerror="this.src='https://via.placeholder.com/140?text=ATHLETIC'">
-                <div><div class="item-meta"><b>${item.source}</b> · ${formatTime(item.date)}</div><h3 class="story-title"><a href="${item.link}" target="_blank">${item.title}</a></h3></div>
-            </div></article>`).join('');
-        
-        document.getElementById('newsMoreBtn').style.display = (newsLimit < filtered.length) ? 'block' : 'none';
+        document.getElementById('newsListHome').innerHTML = filtered.slice(0, 15).map(i => createItemHTML(i)).join('');
+        document.getElementById('fullNewsList').innerHTML = filtered.slice(0, newsLimit).map(i => createItemHTML(i)).join('');
+        document.getElementById('newsLoadMoreBtn').style.display = (newsLimit < filtered.length) ? 'block' : 'none';
+    }
+
+    function createItemHTML(item, isPod = false) {
+        if(isPod) {
+            return `<article class="story-group"><div class="podcast-main"><div class="item-meta"><b>${item.source}</b> · ${formatTime(item.date)}</div><h3 class="story-title"><a href="${item.link}" target="_blank">${item.title}</a></h3>${item.audio ? `<audio controls preload="none" src="${item.audio}"></audio>` : ''}</div></article>`;
+        }
+        return `<article class="story-group"><div class="story-main"><img src="${item.image || 'https://via.placeholder.com/140?text=ATHLETIC'}" class="item-thumb ${item.isLogo ? 'is-logo' : ''}" onerror="this.src='https://via.placeholder.com/140?text=ATHLETIC'"><div><div class="item-meta"><b>${item.source}</b> · ${formatTime(item.date)}</div><h3 class="story-title"><a href="${item.link}" target="_blank">${item.title}</a></h3></div></div></article>`;
     }
 
     function increaseNewsLimit() { newsLimit += 15; renderNewsData(); }
@@ -269,22 +313,16 @@
     }
 
     function renderPodcastsData() {
-        const container = document.getElementById('podcastList');
         const bilboBox = document.getElementById('bilboPlayerContainer');
         const enabledNames = podcastSources.filter(s => s.enabled).map(s => s.name);
-        
         let filtered = allPodcasts.filter(i => enabledNames.includes(i.source));
         if (activePodcastFilter !== 'ALL') filtered = filtered.filter(i => i.source === activePodcastFilter);
 
         bilboBox.style.display = (activePodcastFilter === 'ALL' || activePodcastFilter === 'BILBOSPORT') && enabledNames.includes('BILBOSPORT') ? 'block' : 'none';
         
-        container.innerHTML = filtered.slice(0, podLimit).map(pod => `
-            <article class="story-group"><div class="podcast-main">
-                <div class="item-meta"><b>${pod.source}</b> · ${formatTime(pod.date)}</div><h3 class="story-title"><a href="${pod.link}" target="_blank">${pod.title}</a></h3>
-                ${pod.audio ? `<audio controls preload="none" src="${pod.audio}"></audio>` : ''}
-            </div></article>`).join('');
-            
-        document.getElementById('podMoreBtn').style.display = (podLimit < filtered.length) ? 'block' : 'none';
+        document.getElementById('podcastListHome').innerHTML = filtered.slice(0, 15).map(pod => createItemHTML(pod, true)).join('');
+        document.getElementById('fullPodcastList').innerHTML = filtered.slice(0, podLimit).map(pod => createItemHTML(pod, true)).join('');
+        document.getElementById('podLoadMoreBtn').style.display = (podLimit < filtered.length) ? 'block' : 'none';
     }
 
     function increasePodLimit() { podLimit += 15; renderPodcastsData(); }
@@ -295,11 +333,11 @@
         document.getElementById('sec-' + id).classList.add('active');
         document.querySelector(`.nav-item[data-sec="${id}"]`)?.classList.add('active');
 
-        document.getElementById('newsManagerBox').style.display = (id === 'titulares') ? 'block' : 'none';
-        document.getElementById('podcastManagerBox').style.display = (id === 'podcasts') ? 'block' : 'none';
+        document.getElementById('newsManagerBox').style.display = (id === 'titulares' || id === 'noticias') ? 'block' : 'none';
+        document.getElementById('podcastManagerBox').style.display = (id === 'podcasts' || id === 'radio') ? 'block' : 'none';
 
-        if(id === 'titulares') { newsLimit = 15; updateNews(); }
-        else if(id === 'podcasts') { podLimit = 15; updatePodcasts(); }
+        if(id === 'titulares' || id === 'noticias') updateNews(); 
+        else if(id === 'podcasts' || id === 'radio') updatePodcasts();
         window.scrollTo(0,0);
     }
 
