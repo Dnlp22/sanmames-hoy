@@ -96,9 +96,9 @@
 
         .share-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px 20px; }
         .share-btn { 
-            background: var(--paper-dim); border: 1px solid var(--line); border-radius: 4px; padding: 10px; 
-            cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px;
-            font-size: 10px; text-transform: uppercase; font-weight: bold; color: var(--ink); transition: 0.2s;
+            background: var(--paper-dim); border: 1px solid var(--line); border-radius: 4px; padding: 10px 5px; 
+            cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px;
+            font-size: 9px; text-transform: uppercase; font-weight: bold; color: var(--ink); transition: 0.2s;
         }
         .share-btn:hover { background: var(--red); color: #fff; border-color: var(--red); }
         .share-btn svg { width: 18px; height: 18px; fill: currentColor; }
@@ -120,13 +120,13 @@
         .item-meta b { color: var(--red); font-weight: 700; }
         .story-title { font-size: 20px; font-weight: 600; line-height: 1.2; margin: 0 0 10px; }
         .story-title a { color: var(--ink); text-decoration: none; }
-        .story-title a:hover { color: var(--red); }
         
         audio { width: 100%; height: 35px; margin-top: 10px; filter: invert(var(--dark-invert, 0)); }
         body.dark-mode { --dark-invert: 0.9; }
 
-        /* Centered message for infinite scroll loading */
-        #infinite-scroll-trigger { height: 50px; display: flex; align-items: center; justify-content: center; font-family: 'Oswald'; color: var(--steel); text-transform: uppercase; font-size: 12px; }
+        #infinite-scroll-trigger { height: 80px; display: flex; align-items: center; justify-content: center; font-family: 'Oswald'; color: var(--steel); text-transform: uppercase; font-size: 12px; }
+
+        .centered-widget-box { background: var(--bg-card); padding: 20px 10px; border-radius: 8px; border: 1px solid var(--line); text-align: center; }
 
         .site-footer { margin-top: 50px; padding: 60px 20px; border-top: 1px solid var(--line); text-align: center; background: var(--bg-card); }
         .footer-links { display: flex; justify-content: center; gap: 30px; margin-top: 20px; flex-wrap: wrap; }
@@ -164,15 +164,15 @@
 
 <div class="main-wrapper">
     <main>
-        <!-- SECCIÓN TITULARES (Ahora con Scroll Infinito) -->
+        <!-- SECCIÓN TITULARES -->
         <section id="sec-titulares" class="content-section active">
             <div class="toolbar"><h2>Última Hora</h2><button style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updateNews(true)">Actualizar</button></div>
             <div class="chips-container" id="newsChipsHome"></div>
             <div id="newsListHome"></div>
-            <!-- Disparador de Scroll Infinito -->
-            <div id="infinite-scroll-trigger">Cargando noticias anteriores...</div>
+            <div id="infinite-scroll-trigger">Cargando más noticias...</div>
         </section>
 
+        <!-- SECCIÓN PODCASTS -->
         <section id="sec-podcasts" class="content-section">
             <div class="toolbar"><h2>Podcasts</h2><button style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updatePodcasts(true)">Actualizar</button></div>
             <div class="chips-container" id="podcastChipsHome"></div>
@@ -182,13 +182,26 @@
             <div id="podcastListHome"></div>
         </section>
 
+        <!-- SECCIÓN ALTAS Y BAJAS (Actualizada con enlace) -->
+        <section id="sec-mercado" class="content-section">
+            <div class="toolbar">
+                <h2>Altas y Bajas — La Cantera de Lezama</h2>
+                <a href="https://www.lacanteradelezama.com/" target="_blank" style="background:var(--ink); color:#fff; text-decoration:none; padding: 6px 12px; font-size: 10px; font-family:'Oswald'; border-radius:4px; text-transform:uppercase;">Visitar Web Oficial</a>
+            </div>
+            <div class="centered-widget-box" style="padding:0; overflow:hidden; border-radius:12px;">
+                <iframe src="https://docs.google.com/spreadsheets/d/18DCz46O7JjmdAzqjM8kSJnpNeA9kqMgxxWIuBkVqV4Y/preview" width="100%" height="800" style="border:0;" loading="lazy"></iframe>
+            </div>
+        </section>
+
+        <!-- SECCIÓN CLASIFICACIÓN -->
         <section id="sec-clasificacion" class="content-section">
-            <div class="toolbar"><h2>Clasificación</h2></div>
+            <div class="toolbar"><h2>LaLiga</h2></div>
             <div class="centered-widget-box">
                 <iframe src="https://futbolweb.net/embed/clasificacion" width="360" height="720" style="border:0;max-width:100%;border-radius:16px;background:#fff;" loading="lazy"></iframe>
             </div>
         </section>
 
+        <!-- SECCIÓN PARTIDOS -->
         <section id="sec-partidos" class="content-section">
             <div class="toolbar"><h2>Partidos</h2></div>
             <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
@@ -203,6 +216,7 @@
             <h3>Secciones</h3>
             <div class="nav-item active" data-sec="titulares" onclick="showSection('titulares')">Titulares</div>
             <div class="nav-item" data-sec="podcasts" onclick="showSection('podcasts')">Podcasts</div>
+            <div class="nav-item" data-sec="mercado" onclick="showSection('mercado')">Altas y Bajas</div>
             <div class="nav-item" data-sec="clasificacion" onclick="showSection('clasificacion')">Clasificación</div>
             <div class="nav-item" data-sec="partidos" onclick="showSection('partidos')">Partidos</div>
         </div>
@@ -221,15 +235,15 @@
             <h3>Compartir Web</h3>
             <div class="share-grid">
                 <div class="share-btn" onclick="shareOn('whatsapp')">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.483 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.308 1.656zm6.757-4.02c1.535.912 3.033 1.397 4.542 1.398 5.403 0 9.8-4.398 9.802-9.8.001-2.618-1.02-5.08-2.871-6.932-1.851-1.852-4.313-2.873-6.931-2.873-5.403 0-9.802 4.398-9.802 9.8 0 1.761.507 3.479 1.467 4.975l-1.09 3.979 4.083-1.071z"/></svg>
-                    WhatsApp
+                    <svg viewBox="0 0 24 24" width="20" height="20"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.483 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.308 1.656zm6.757-4.02c1.535.912 3.033 1.397 4.542 1.398 5.403 0 9.8-4.398 9.802-9.8.001-2.618-1.02-5.08-2.871-6.932-1.851-1.852-4.313-2.873-6.931-2.873-5.403 0-9.802 4.398-9.802 9.8 0 1.761.507 3.479 1.467 4.975l-1.09 3.979 4.083-1.071z" fill="currentColor"/></svg>
+                    WA
                 </div>
                 <div class="share-btn" onclick="shareOn('twitter')">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 7.689 8.502 11.236h-6.657l-5.204-6.864-5.965 6.864H1.45l7.731-8.232L1.15 2.25h6.827l4.695 6.195 5.572-6.195zm-1.16 17.025h1.833L7.045 4.126H5.078L17.084 19.275z"/></svg>
+                    <svg viewBox="0 0 24 24" width="20" height="20"><path d="M18.244 2.25h3.308l-7.227 7.689 8.502 11.236h-6.657l-5.204-6.864-5.965 6.864H1.45l7.731-8.232L1.15 2.25h6.827l4.695 6.195 5.572-6.195zm-1.16 17.025h1.833L7.045 4.126H5.078L17.084 19.275z" fill="currentColor"/></svg>
                     X
                 </div>
                 <div class="share-btn" onclick="shareOn('copy')">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                    <svg viewBox="0 0 24 24" width="20" height="20"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" fill="currentColor"/></svg>
                     Link
                 </div>
             </div>
@@ -269,40 +283,27 @@
     let allNews = [], allPodcasts = [];
     let activeNewsFilter = 'ALL', activePodcastFilter = 'ALL';
 
-    // --- COMPARTIR ---
     function shareOn(platform) {
         const url = window.location.href;
-        if (platform === 'whatsapp') window.open(`https://api.whatsapp.com/send?text=${url}`);
-        if (platform === 'twitter') window.open(`https://twitter.com/intent/tweet?url=${url}`);
-        if (platform === 'copy') { navigator.clipboard.writeText(url); alert("Enlace copiado"); }
+        const text = "Toda la actualidad del Athletic en un mismo lugar: San Mamés Hoy";
+        switch(platform) {
+            case 'whatsapp': window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`); break;
+            case 'twitter': window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`); break;
+            case 'copy': navigator.clipboard.writeText(url).then(() => alert("Enlace copiado")).catch(() => alert("Error al copiar")); break;
+        }
     }
 
-    // --- MODO OSCURO ---
     function toggleDarkMode() {
         const isDark = document.body.classList.toggle('dark-mode');
         localStorage.setItem('theme_pref', isDark ? 'dark' : 'light');
         document.getElementById('themeBtn').innerText = isDark ? 'Modo Claro' : 'Modo Oscuro';
     }
 
-    // --- MEMORIA Y PREFERENCIAS ---
     function loadSavedPreferences() {
-        const savedNews = localStorage.getItem('news_prefs');
-        const savedPods = localStorage.getItem('pod_prefs');
-        const savedTheme = localStorage.getItem('theme_pref');
-        const savedSection = localStorage.getItem('active_section');
-
-        if (savedNews) {
-            const prefs = JSON.parse(savedNews);
-            newsSources.forEach(s => { if (prefs.hasOwnProperty(s.id)) s.enabled = prefs[s.id]; });
-        }
-        if (savedPods) {
-            const prefs = JSON.parse(savedPods);
-            podcastSources.forEach(s => { if (prefs.hasOwnProperty(s.id)) s.enabled = prefs[s.id]; });
-        }
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-mode');
-            document.getElementById('themeBtn').innerText = 'Modo Claro';
-        }
+        const savedNews = localStorage.getItem('news_prefs'), savedPods = localStorage.getItem('pod_prefs'), savedTheme = localStorage.getItem('theme_pref'), savedSection = localStorage.getItem('active_section');
+        if (savedNews) { const prefs = JSON.parse(savedNews); newsSources.forEach(s => { if (prefs.hasOwnProperty(s.id)) s.enabled = prefs[s.id]; }); }
+        if (savedPods) { const prefs = JSON.parse(savedPods); podcastSources.forEach(s => { if (prefs.hasOwnProperty(s.id)) s.enabled = prefs[s.id]; }); }
+        if (savedTheme === 'dark') { document.body.classList.add('dark-mode'); document.getElementById('themeBtn').innerText = 'Modo Claro'; }
         showSection(savedSection || 'titulares');
     }
 
@@ -330,7 +331,6 @@
         }
     }
 
-    // --- RSS LOGIC ---
     async function fetchXML(url) {
         try {
             const res = await fetch(`${PROXY}?url=${encodeURIComponent(url)}`);
@@ -340,7 +340,7 @@
 
     function formatTime(dateStr) {
         const d = new Date(dateStr);
-        return d.toDateString() === new Date().toDateString() ? d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) : d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
+        return isNaN(d) ? '' : (d.toDateString() === new Date().toDateString() ? d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) : d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' }));
     }
 
     async function updateNews(force = false) {
@@ -353,16 +353,16 @@
             return items.map(n => {
                 let img = s.useLogo ? LOGOS[s.id] : null;
                 if (!s.useLogo) {
-                    img = n.querySelector('enclosure')?.getAttribute('url') || 
-                          n.getElementsByTagNameNS("*", "content")[0]?.getAttribute('url');
+                    img = n.querySelector('enclosure')?.getAttribute('url') || n.getElementsByTagNameNS("*", "content")[0]?.getAttribute('url');
                     if(!img) {
                         const blob = n.querySelector('description, summary, content')?.textContent || '';
                         const match = blob.match(/src="([^">]+\.(?:jpg|jpeg|png|webp|gif))"/i);
                         if(match) img = match[1];
                     }
                 }
-                const link = n.querySelector('link[rel="alternate"]')?.getAttribute('href') || n.querySelector('link')?.textContent || n.querySelector('link')?.getAttribute('href');
-                return { title: n.querySelector('title')?.textContent.replace(/^(Athletic Club|Athletic|El Correo|Marca|Deia)\s*[:|]\s*/i, '').trim(), link, date: n.querySelector('pubDate, published, updated')?.textContent || new Date(), image: img, source: s.name, isLogo: s.useLogo };
+                let link = n.querySelector('link')?.textContent || n.querySelector('link')?.getAttribute('href');
+                if (n.querySelector('link[rel="alternate"]')) link = n.querySelector('link[rel="alternate"]').getAttribute('href');
+                return { title: n.querySelector('title')?.textContent.replace(/^(Athletic Club|Athletic|El Correo|Marca|Deia|Europa Press)\s*[:|]\s*/i, '').trim(), link, date: n.querySelector('pubDate, published, updated')?.textContent || new Date(), image: img, source: s.name, isLogo: s.useLogo };
             });
         }));
         allNews = results.flat().sort((a,b) => new Date(b.date) - new Date(a.date));
@@ -383,19 +383,9 @@
         return `<article class="story-group"><div class="story-main"><img src="${item.image || 'https://via.placeholder.com/140?text=ATHLETIC'}" class="item-thumb ${item.isLogo ? 'is-logo' : ''}" onerror="this.src='https://via.placeholder.com/140?text=ATHLETIC'"><div><div class="item-meta"><b>${item.source}</b> · ${formatTime(item.date)}</div><h3 class="story-title"><a href="${item.link}" target="_blank">${item.title}</a></h3></div></div></article>`;
     }
 
-    // --- INFINITE SCROLL LOGIC ---
     const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-            let filtered = allNews.filter(i => newsSources.find(s => s.name === i.source && s.enabled));
-            if (activeNewsFilter !== 'ALL') filtered = filtered.filter(i => i.source === activeNewsFilter);
-            
-            if (newsLimit < filtered.length) {
-                newsLimit += 15;
-                renderNewsData();
-            }
-        }
-    }, { threshold: 1.0 });
-
+        if (entries[0].isIntersecting && allNews.length > 0) { newsLimit += 15; renderNewsData(); }
+    }, { threshold: 0.1 });
     observer.observe(document.getElementById('infinite-scroll-trigger'));
 
     async function updatePodcasts(force = false) {
