@@ -90,7 +90,7 @@
         body.mode-full-width .masthead-inner { max-width: 98%; }
 
         .sidebar { position: sticky; top: 120px; height: fit-content; }
-        .sidebar-box { background: var(--bg-card); border: 1px solid var(--line); border-radius: 4px; padding: 15px 0; margin-bottom: 20px; }
+        .sidebar-box { background: var(--bg-card); border: 1px solid var(--line); border-radius: 4px; padding: 15px 0; margin-bottom: 20px; overflow: hidden; }
         .sidebar-box h3 { padding: 0 20px; margin: 0 0 10px; font-size: 13px; text-transform: uppercase; color: var(--steel); border-bottom: 1px solid var(--line); padding-bottom: 5px; }
         
         .nav-item { padding: 12px 20px; cursor: pointer; text-transform: uppercase; font-weight: 600; font-size: 15px; display: flex; align-items: center; border-left: 4px solid transparent; transition: 0.2s; color: var(--ink); text-decoration: none; }
@@ -143,10 +143,9 @@
         body.dark-mode { --dark-invert: 0.9; }
 
         .site-footer { margin-top: 50px; padding: 60px 20px; border-top: 1px solid var(--line); text-align: center; background: var(--bg-card); }
-        .footer-links { display: flex; justify-content: center; gap: 30px; margin-top: 20px; flex-wrap: wrap; }
+        .footer-links { display: flex; justify: center; gap: 30px; margin-top: 20px; flex-wrap: wrap; }
         .footer-links a { color: var(--red); text-decoration: none; font-weight: 600; text-transform: uppercase; font-size: 14px; font-family: 'Oswald'; }
 
-        /* Estilo para la nueva sección de gestión */
         .management-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
         @media (max-width: 600px) { .management-grid { grid-template-columns: 1fr; } }
         .mgmt-card { background: var(--bg-card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
@@ -177,8 +176,7 @@
         <nav id="header-nav-h">
             <a class="nav-link-h" onclick="showSection('titulares')">Titulares</a>
             <a class="nav-link-h" onclick="showSection('podcasts')">Podcasts</a>
-            <a class="nav-link-h" onclick="showSection('mercado')">Altas y Bajas</a>
-            <a class="nav-link-h" onclick="showSection('ajustes')">⚙️ Ajustes</a>
+            <a class="nav-link-h" onclick="showSection('ajustes')">Ajustes</a>
         </nav>
 
         <div class="header-actions">
@@ -211,34 +209,6 @@
             </div>
         </section>
 
-        <section id="sec-mercado" class="content-section">
-            <div class="toolbar">
-                <h2>Altas y Bajas — La Cantera de Lezama</h2>
-                <div style="display: flex; gap: 8px;">
-                    <a href="https://docs.google.com/spreadsheets/d/18DCz46O7JjmdAzqjM8kSJnpNeA9kqMgxxWIuBkVqV4Y/edit?gid=0#gid=0" target="_blank" class="nav-link-h active" style="font-size: 10px; background: var(--red);">Pantalla Completa</a>
-                </div>
-            </div>
-            <div style="background:#fff; border-radius:12px; overflow:hidden; border: 1px solid var(--line);">
-                <iframe src="https://docs.google.com/spreadsheets/d/18DCz46O7JjmdAzqjM8kSJnpNeA9kqMgxxWIuBkVqV4Y/preview?rm=minimal" width="100%" height="1500" style="border:0;" loading="lazy"></iframe>
-            </div>
-        </section>
-
-        <section id="sec-clasificacion" class="content-section">
-            <div class="toolbar"><h2>LaLiga</h2></div>
-            <div style="display: flex; justify-content: center;">
-                <iframe src="https://futbolweb.net/embed/clasificacion" width="360" height="720" style="border:0;max-width:100%;border-radius:16px;background:#fff;"></iframe>
-            </div>
-        </section>
-
-        <section id="sec-partidos" class="content-section">
-            <div class="toolbar"><h2>Partidos</h2></div>
-            <div style="display:flex; flex-direction:column; align-items:center; gap:30px;">
-                <iframe src="https://futbolweb.net/embed/equipo/athletic-club/proxima" width="360" height="200" style="border:0;max-width:100%;border-radius:16px;background:#fff"></iframe>
-                <iframe src="https://futbolweb.net/embed/equipo/athletic-club/ultima" width="360" height="200" style="border:0;max-width:100%;border-radius:16px;background:#fff"></iframe>
-            </div>
-        </section>
-
-        <!-- SECCIÓN DE AJUSTES -->
         <section id="sec-ajustes" class="content-section">
             <div class="toolbar"><h2>Configuración de Medios</h2></div>
             <p>Elige qué fuentes quieres ver en la web. Los cambios se guardan automáticamente en este dispositivo.</p>
@@ -260,20 +230,32 @@
             <h3>Secciones</h3>
             <div class="nav-item active" data-sec="titulares" onclick="showSection('titulares')">Titulares</div>
             <div class="nav-item" data-sec="podcasts" onclick="showSection('podcasts')">Podcasts</div>
-            <div class="nav-item" data-sec="mercado" onclick="showSection('mercado')">Altas y Bajas</div>
-            <div class="nav-item" data-sec="clasificacion" onclick="showSection('clasificacion')">Clasificación</div>
-            <div class="nav-item" data-sec="partidos" onclick="showSection('partidos')">Partidos</div>
-            <div class="nav-item" data-sec="ajustes" onclick="showSection('ajustes')">⚙️ Ajustes</div>
+            <div class="nav-item" data-sec="ajustes" onclick="showSection('ajustes')">Ajustes</div>
         </div>
 
-        <div class="sidebar-box">
+        <div class="sidebar-box" id="newsBoxSide">
             <h3>Gestionar Medios</h3>
             <div id="newsManagerSide"></div>
         </div>
 
-        <div class="sidebar-box">
+        <div class="sidebar-box" id="podcastBoxSide">
             <h3>Gestionar Radio</h3>
             <div id="podcastManagerSide"></div>
+        </div>
+
+        <div class="sidebar-box" id="sidebarPartidos">
+            <h3>Próximo Partido</h3>
+            <div style="padding: 10px; text-align: center;">
+                <iframe src="https://futbolweb.net/embed/equipo/athletic-club/proxima" width="100%" height="180" style="border:0; border-radius:12px; background:#fff"></iframe>
+                <iframe src="https://futbolweb.net/embed/equipo/athletic-club/ultima" width="100%" height="180" style="border:0; border-radius:12px; background:#fff; margin-top:10px;"></iframe>
+            </div>
+        </div>
+
+        <div class="sidebar-box" id="sidebarClasificacion">
+            <h3>Clasificación LaLiga</h3>
+            <div style="padding: 10px; text-align: center;">
+                <iframe src="https://futbolweb.net/embed/clasificacion" width="100%" height="600" style="border:0; border-radius:12px; background:#fff;"></iframe>
+            </div>
         </div>
 
         <div class="sidebar-box">
@@ -341,6 +323,13 @@
             
             localStorage.setItem('active_section', id);
             
+            document.getElementById('newsBoxSide').style.display = (id === 'titulares') ? 'block' : 'none';
+            document.getElementById('podcastBoxSide').style.display = (id === 'podcasts') ? 'block' : 'none';
+            
+            const isInicio = (id === 'titulares');
+            document.getElementById('sidebarPartidos').style.display = isInicio ? 'block' : 'none';
+            document.getElementById('sidebarClasificacion').style.display = isInicio ? 'block' : 'none';
+            
             if(id === 'titulares' && allNews.length === 0) updateNews();
             else if(id === 'podcasts' && allPodcasts.length === 0) updatePodcasts();
             window.scrollTo(0,0);
@@ -369,10 +358,15 @@
             return Array.from(xml.querySelectorAll('item, entry')).map(n => {
                 let img = s.useLogo ? LOGOS[s.id] : null;
                 if (!s.useLogo) {
-                    img = n.querySelector('enclosure[type^="image"]')?.getAttribute('url') || 
-                          n.querySelector('enclosure')?.getAttribute('url') ||
-                          n.getElementsByTagNameNS("*", "content")[0]?.getAttribute('url') ||
-                          n.querySelector('media\\:content, content')?.getAttribute('url');
+                    // Mejora en la captura de imágenes para Naiz y otros
+                    const enclosure = n.querySelector('enclosure[type^="image"], enclosure');
+                    const mediaContent = n.getElementsByTagNameNS("*", "content")[0] || n.querySelector('media\\:content, content');
+                    const description = n.querySelector('description, summary')?.textContent || "";
+                    const imgMatch = description.match(/<img[^>]+src="([^">]+)"/);
+
+                    img = enclosure?.getAttribute('url') || 
+                          mediaContent?.getAttribute('url') || 
+                          (imgMatch ? imgMatch[1] : null);
                 }
                 let link = n.querySelector('link')?.textContent || n.querySelector('link')?.getAttribute('href');
                 let titleText = n.querySelector('title')?.textContent || '';
@@ -395,11 +389,7 @@
     function renderNewsData() {
         const enabledNames = newsSources.filter(s => s.enabled).map(s => s.name);
         let filtered = allNews.filter(i => enabledNames.includes(i.source));
-        
-        if (activeNewsFilter !== 'ALL') {
-            filtered = filtered.filter(i => i.source === activeNewsFilter);
-        }
-        
+        if (activeNewsFilter !== 'ALL') filtered = filtered.filter(i => i.source === activeNewsFilter);
         const visible = filtered.slice(0, newsLimit);
         document.getElementById('newsListHome').innerHTML = visible.map(i => createItemHTML(i)).join('');
         document.getElementById('loadMoreNewsContainer').style.display = (filtered.length > newsLimit) ? 'flex' : 'none';
@@ -442,13 +432,8 @@
     function renderPodcastsData() {
         const enabledNames = podcastSources.filter(s => s.enabled).map(s => s.name);
         let filtered = allPodcasts.filter(i => enabledNames.includes(i.source));
-        
-        if (activePodcastFilter !== 'ALL') {
-            filtered = filtered.filter(i => i.source === activePodcastFilter);
-        }
-        
+        if (activePodcastFilter !== 'ALL') filtered = filtered.filter(i => i.source === activePodcastFilter);
         document.getElementById('bilboPlayerHome').style.display = (enabledNames.includes('BILBOSPORT') && (activePodcastFilter === 'ALL' || activePodcastFilter === 'BILBOSPORT')) ? 'block' : 'none';
-        
         const visible = filtered.slice(0, podcastLimit);
         document.getElementById('podcastListHome').innerHTML = visible.map(pod => createItemHTML(pod, true)).join('');
         document.getElementById('loadMorePodsContainer').style.display = (filtered.length > podcastLimit) ? 'flex' : 'none';
@@ -507,22 +492,16 @@
     function loadSavedPreferences() {
         const savedNews = JSON.parse(localStorage.getItem('news_prefs_v2') || '[]');
         const savedPods = JSON.parse(localStorage.getItem('pod_prefs_v2') || '[]');
-        
         savedNews.forEach(p => { const s = newsSources.find(x => x.id === p.id); if(s) s.enabled = p.enabled; });
         savedPods.forEach(p => { const s = podcastSources.find(x => x.id === p.id); if(s) s.enabled = p.enabled; });
-        
         if (localStorage.getItem('theme_pref') === 'dark') toggleDarkMode();
         showSection(localStorage.getItem('active_section') || 'titulares');
     }
 
     function renderManagers() {
         const gen = (list, fn) => list.map(s => `<div class="source-toggle"><span>${s.name}</span><label class="switch"><input type="checkbox" ${s.enabled?'checked':''} onchange="${fn}('${s.id}')"><span class="slider"></span></label></div>`).join('');
-        
-        // Renderizar en sidebar
         document.getElementById('newsManagerSide').innerHTML = gen(newsSources, 'toggleNewsSource');
         document.getElementById('podcastManagerSide').innerHTML = gen(podcastSources, 'togglePodcastSource');
-        
-        // Renderizar en sección Ajustes
         document.getElementById('newsManagerMain').innerHTML = gen(newsSources, 'toggleNewsSource');
         document.getElementById('podcastManagerMain').innerHTML = gen(podcastSources, 'togglePodcastSource');
     }
@@ -534,7 +513,6 @@
         if(p==='copy') { navigator.clipboard.writeText(u); alert("¡Enlace copiado!"); }
     }
 
-    // Inicialización inicial
     loadSavedPreferences();
     renderManagers();
 </script>
