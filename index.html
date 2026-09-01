@@ -166,11 +166,10 @@
             <h1 class="brand">San Mamés <em>Hoy</em></h1>
         </a>
 
-        <!-- Navegación Horizontal (Modo Full Width) -->
         <nav id="header-nav-h">
             <a class="nav-link-h" onclick="showSection('titulares')">Titulares</a>
             <a class="nav-link-h" onclick="showSection('podcasts')">Podcasts</a>
-            <a class="nav-link-h active" onclick="showSection('mercado')">Altas y Bajas</a>
+            <a class="nav-link-h" onclick="showSection('mercado')">Altas y Bajas</a>
             <a class="nav-link-h" onclick="showSection('clasificacion')">Clasificación</a>
             <a class="nav-link-h" onclick="showSection('partidos')">Partidos</a>
         </nav>
@@ -184,7 +183,6 @@
 
 <div class="main-wrapper">
     <main>
-        <!-- SECCIÓN TITULARES -->
         <section id="sec-titulares" class="content-section active">
             <div class="toolbar"><h2>Última Hora</h2><button style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updateNews(true)">Actualizar</button></div>
             <div class="chips-container" id="newsChipsHome"></div>
@@ -192,18 +190,15 @@
             <div id="infinite-scroll-trigger">Cargando más noticias...</div>
         </section>
 
-        <!-- SECCIÓN PODCASTS -->
         <section id="sec-podcasts" class="content-section">
             <div class="toolbar"><h2>Podcasts</h2><button style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updatePodcasts(true)">Actualizar</button></div>
             <div class="chips-container" id="podcastChipsHome"></div>
-            <!-- REPRODUCTOR BILBOSPORT (NERVIÓN) -->
             <div id="bilboPlayerHome" style="display:none; margin-bottom:20px; background:var(--bg-card); padding:10px; border-radius:8px; border:1px solid var(--line);">
                 <iframe src="https://www.ivoox.com/player_es_podcast_721276_zp_1.html?c1=800506" width="100%" height="400" frameborder="0"></iframe>
             </div>
             <div id="podcastListHome"></div>
         </section>
 
-        <!-- SECCIÓN ALTAS Y BAJAS -->
         <section id="sec-mercado" class="content-section">
             <div class="toolbar">
                 <h2>Altas y Bajas — La Cantera de Lezama</h2>
@@ -217,7 +212,6 @@
             </div>
         </section>
 
-        <!-- SECCIÓN CLASIFICACIÓN -->
         <section id="sec-clasificacion" class="content-section">
             <div class="toolbar"><h2>LaLiga</h2></div>
             <div class="centered-widget-box">
@@ -225,7 +219,6 @@
             </div>
         </section>
 
-        <!-- SECCIÓN PARTIDOS (Arreglada con padding extra) -->
         <section id="sec-partidos" class="content-section" style="padding-bottom: 80px;">
             <div class="toolbar"><h2>Partidos</h2></div>
             <div style="display:flex; flex-direction:column; align-items:center; gap:30px;">
@@ -255,7 +248,6 @@
             <div id="podcastManager"></div>
         </div>
 
-        <!-- COMPARTIR WEB -->
         <div class="sidebar-box">
             <h3>Compartir Web</h3>
             <div class="share-grid">
@@ -368,7 +360,13 @@
 
     function renderNewsData() {
         let filtered = allNews.filter(i => newsSources.find(s => s.name === i.source && s.enabled));
-        if (activeNewsFilter !== 'ALL') filtered = filtered.filter(i => i.source === activeNewsFilter);
+        if (activeNewsFilter !== 'ALL') {
+             if (!newsSources.find(s => s.name === activeNewsFilter && s.enabled)) {
+                activeNewsFilter = 'ALL';
+             } else {
+                filtered = filtered.filter(i => i.source === activeNewsFilter);
+             }
+        }
         document.getElementById('newsListHome').innerHTML = filtered.slice(0, newsLimit).map(i => createItemHTML(i)).join('');
     }
 
@@ -398,7 +396,13 @@
     function renderPodcastsData() {
         const enabledNames = podcastSources.filter(s => s.enabled).map(s => s.name);
         let filtered = allPodcasts.filter(i => enabledNames.includes(i.source));
-        if (activePodcastFilter !== 'ALL') filtered = filtered.filter(i => i.source === activePodcastFilter);
+        if (activePodcastFilter !== 'ALL') {
+            if (!enabledNames.includes(activePodcastFilter)) {
+                activePodcastFilter = 'ALL';
+            } else {
+                filtered = filtered.filter(i => i.source === activePodcastFilter);
+            }
+        }
         document.getElementById('bilboPlayerHome').style.display = (enabledNames.includes('BILBOSPORT') && (activePodcastFilter === 'ALL' || activePodcastFilter === 'BILBOSPORT')) ? 'block' : 'none';
         document.getElementById('podcastListHome').innerHTML = filtered.slice(0, 30).map(pod => createItemHTML(pod, true)).join('');
     }
@@ -420,8 +424,21 @@
     }, { threshold: 0.1 });
     observer.observe(document.getElementById('infinite-scroll-trigger'));
 
-    function toggleNewsSource(id) { newsSources.find(s=>s.id===id).enabled = !newsSources.find(s=>s.id===id).enabled; savePreferences(); updateNews(true); renderManagers(); }
-    function togglePodcastSource(id) { podcastSources.find(s=>s.id===id).enabled = !podcastSources.find(s=>s.id===id).enabled; savePreferences(); updatePodcasts(true); renderManagers(); }
+    function toggleNewsSource(id) { 
+        let src = newsSources.find(s=>s.id===id);
+        src.enabled = !src.enabled; 
+        savePreferences(); 
+        updateNews(true); // Recarga y renderiza
+        renderManagers(); 
+    }
+
+    function togglePodcastSource(id) { 
+        let src = podcastSources.find(s=>s.id===id);
+        src.enabled = !src.enabled; 
+        savePreferences(); 
+        updatePodcasts(true); // Recarga y renderiza
+        renderManagers(); 
+    }
 
     function toggleDarkMode() {
         const isDark = document.body.classList.toggle('dark-mode');
