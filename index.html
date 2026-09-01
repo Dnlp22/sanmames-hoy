@@ -105,6 +105,11 @@
         input:checked + .slider { background-color: var(--red); }
         input:checked + .slider:before { transform: translateX(14px); }
 
+        /* Botón Ver Más */
+        .load-more-container { display: flex; justify-content: center; padding: 30px 0; }
+        .btn-ver-mas { background: var(--red); color: #fff; border: none; padding: 12px 30px; font-family: 'Oswald'; text-transform: uppercase; cursor: pointer; border-radius: 4px; font-weight: 600; font-size: 14px; letter-spacing: 1px; transition: 0.2s; }
+        .btn-ver-mas:hover { background: var(--red-dark); }
+
         /* COMPARTIR WEB */
         .share-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px 20px; }
         .share-btn { 
@@ -136,10 +141,6 @@
         audio { width: 100%; height: 35px; margin-top: 10px; filter: invert(var(--dark-invert, 0)); }
         body.dark-mode { --dark-invert: 0.9; }
 
-        #infinite-scroll-trigger { height: 80px; display: flex; align-items: center; justify-content: center; font-family: 'Oswald'; color: var(--steel); text-transform: uppercase; font-size: 12px; }
-
-        .centered-widget-box { background: var(--bg-card); padding: 20px 10px; border-radius: 8px; border: 1px solid var(--line); text-align: center; }
-
         .site-footer { margin-top: 50px; padding: 60px 20px; border-top: 1px solid var(--line); text-align: center; background: var(--bg-card); }
         .footer-links { display: flex; justify-content: center; gap: 30px; margin-top: 20px; flex-wrap: wrap; }
         .footer-links a { color: var(--red); text-decoration: none; font-weight: 600; text-transform: uppercase; font-size: 14px; font-family: 'Oswald'; }
@@ -152,7 +153,6 @@
             .story-main { grid-template-columns: 100px 1fr; }
             .item-thumb { width: 100px; height: 100px; }
             #header-nav-h { justify-content: center; margin-bottom: 10px; }
-            .bookmark-notice { display: none; }
         }
     </style>
 </head>
@@ -187,7 +187,9 @@
             <div class="toolbar"><h2>Última Hora</h2><button id="btnUpdateNews" style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updateNews(true)">Actualizar</button></div>
             <div class="chips-container" id="newsChipsHome"></div>
             <div id="newsListHome"></div>
-            <div id="infinite-scroll-trigger">Cargando más noticias...</div>
+            <div id="loadMoreNewsContainer" class="load-more-container" style="display:none;">
+                <button class="btn-ver-mas" onclick="loadMoreNews()">Ver más noticias</button>
+            </div>
         </section>
 
         <section id="sec-podcasts" class="content-section">
@@ -197,6 +199,9 @@
                 <iframe src="https://www.ivoox.com/player_es_podcast_721276_zp_1.html?c1=800506" width="100%" height="400" frameborder="0"></iframe>
             </div>
             <div id="podcastListHome"></div>
+            <div id="loadMorePodsContainer" class="load-more-container" style="display:none;">
+                <button class="btn-ver-mas" onclick="loadMorePods()">Ver más podcasts</button>
+            </div>
         </section>
 
         <section id="sec-mercado" class="content-section">
@@ -275,7 +280,9 @@
 <script>
     const LOGOS = { 'elcorreo': "https://static.vocstatic.com/voc26/latest/assets/images/logos/logo-elcorreo.svg", 'europapress': "https://s01.europapress.net/imagenes/estaticos/europa-press.png" };
     const PROXY = 'https://athletic-rss-proxy.danelpuente22.workers.dev/';
-    let newsLimit = 15;
+    
+    let newsLimit = 20;
+    let podcastLimit = 20;
 
     let newsSources = [
         { id: 'elcorreo', name: 'EL CORREO', url: 'https://www.elcorreo.com/rss/atom/?section=/athletic', enabled: true, useLogo: true },
@@ -324,7 +331,6 @@
 
     async function fetchXML(url) {
         try {
-            // Timeout de 6 segundos para no bloquear la carga si un medio falla
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 6000);
             const res = await fetch(`${PROXY}?url=${encodeURIComponent(url)}`, { signal: controller.signal });
@@ -336,7 +342,7 @@
 
     async function updateNews(force = false) {
         const btn = document.getElementById('btnUpdateNews');
-        if(force) btn.innerText = "Actualizando...";
+        if(force) { btn.innerText = "Actualizando..."; newsLimit = 20; }
         
         const enabled = newsSources.filter(s => s.enabled);
         const results = await Promise.all(enabled.map(async s => {
@@ -364,7 +370,16 @@
         const enabledNames = newsSources.filter(s => s.enabled).map(s => s.name);
         let filtered = allNews.filter(i => enabledNames.includes(i.source));
         if (activeNewsFilter !== 'ALL') filtered = filtered.filter(i => i.source === activeNewsFilter);
-        document.getElementById('newsListHome').innerHTML = filtered.slice(0, newsLimit).map(i => createItemHTML(i)).join('');
+        
+        const visible = filtered.slice(0, newsLimit);
+        document.getElementById('newsListHome').innerHTML = visible.map(i => createItemHTML(i)).join('');
+        
+        document.getElementById('loadMoreNewsContainer').style.display = (filtered.length > newsLimit) ? 'flex' : 'none';
+    }
+
+    function loadMoreNews() {
+        newsLimit += 20;
+        renderNewsData();
     }
 
     function createItemHTML(item, isPod = false) {
@@ -376,7 +391,7 @@
 
     async function updatePodcasts(force = false) {
         const btn = document.getElementById('btnUpdatePods');
-        if(force) btn.innerText = "Actualizando...";
+        if(force) { btn.innerText = "Actualizando..."; podcastLimit = 20; }
 
         const rssEnabled = podcastSources.filter(s => s.enabled && s.url);
         const results = await Promise.all(rssEnabled.map(async s => {
@@ -397,32 +412,37 @@
         const enabledNames = podcastSources.filter(s => s.enabled).map(s => s.name);
         let filtered = allPodcasts.filter(i => enabledNames.includes(i.source));
         if (activePodcastFilter !== 'ALL') filtered = filtered.filter(i => i.source === activePodcastFilter);
+        
         document.getElementById('bilboPlayerHome').style.display = (enabledNames.includes('BILBOSPORT') && (activePodcastFilter === 'ALL' || activePodcastFilter === 'BILBOSPORT')) ? 'block' : 'none';
-        document.getElementById('podcastListHome').innerHTML = filtered.slice(0, 30).map(pod => createItemHTML(pod, true)).join('');
+        
+        const visible = filtered.slice(0, podcastLimit);
+        document.getElementById('podcastListHome').innerHTML = visible.map(pod => createItemHTML(pod, true)).join('');
+        
+        document.getElementById('loadMorePodsContainer').style.display = (filtered.length > podcastLimit) ? 'flex' : 'none';
+    }
+
+    function loadMorePods() {
+        podcastLimit += 20;
+        renderPodcastsData();
     }
 
     function renderNewsChips() {
         const enabled = newsSources.filter(s => s.enabled);
-        const html = [{name:'ALL', label:'TODAS'}, ...enabled].map(s => `<div class="chip ${activeNewsFilter === s.name ? 'active' : ''}" onclick="activeNewsFilter='${s.name}'; newsLimit=15; renderNewsData(); renderNewsChips();">${s.label || s.name}</div>`).join('');
+        const html = [{name:'ALL', label:'TODAS'}, ...enabled].map(s => `<div class="chip ${activeNewsFilter === s.name ? 'active' : ''}" onclick="activeNewsFilter='${s.name}'; newsLimit=20; renderNewsData(); renderNewsChips();">${s.label || s.name}</div>`).join('');
         document.getElementById('newsChipsHome').innerHTML = html;
     }
 
     function renderPodcastChips() {
         const enabled = podcastSources.filter(s => s.enabled);
-        const html = [{name:'ALL', label:'TODOS'}, ...enabled].map(s => `<div class="chip ${activePodcastFilter === s.name ? 'active' : ''}" onclick="activePodcastFilter='${s.name}'; renderPodcastsData(); renderPodcastChips();">${s.label || s.name}</div>`).join('');
+        const html = [{name:'ALL', label:'TODOS'}, ...enabled].map(s => `<div class="chip ${activePodcastFilter === s.name ? 'active' : ''}" onclick="activePodcastFilter='${s.name}'; podcastLimit=20; renderPodcastsData(); renderPodcastChips();">${s.label || s.name}</div>`).join('');
         document.getElementById('podcastChipsHome').innerHTML = html;
     }
-
-    const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && allNews.length > 0) { newsLimit += 15; renderNewsData(); }
-    }, { threshold: 0.1 });
-    observer.observe(document.getElementById('infinite-scroll-trigger'));
 
     function toggleNewsSource(id) { 
         let src = newsSources.find(s => s.id === id);
         src.enabled = !src.enabled; 
         savePreferences(); 
-        // Actualización inmediata sin recargar de red para que sea fluido
+        newsLimit = 20;
         renderNewsData(); 
         renderNewsChips();
         renderManagers(); 
@@ -432,7 +452,7 @@
         let src = podcastSources.find(s => s.id === id);
         src.enabled = !src.enabled; 
         savePreferences(); 
-        // Actualización inmediata
+        podcastLimit = 20;
         renderPodcastsData(); 
         renderPodcastChips();
         renderManagers(); 
