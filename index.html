@@ -94,7 +94,6 @@
         input:checked + .slider { background-color: var(--red); }
         input:checked + .slider:before { transform: translateX(14px); }
 
-        /* COMPARTIR */
         .share-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px 20px; }
         .share-btn { 
             background: var(--paper-dim); border: 1px solid var(--line); border-radius: 4px; padding: 10px; 
@@ -130,14 +129,10 @@
         .btn-red-main:hover { background: var(--red-dark); }
         .centered-widget-box { background: var(--bg-card); padding: 20px 10px; border-radius: 8px; border: 1px solid var(--line); text-align: center; }
 
-        /* FOOTER */
         .site-footer { margin-top: 50px; padding: 60px 20px; border-top: 1px solid var(--line); text-align: center; background: var(--bg-card); }
         .footer-content p { font-family: 'Oswald', sans-serif; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; color: var(--steel); }
         .footer-links { display: flex; justify-content: center; gap: 30px; margin-top: 20px; flex-wrap: wrap; }
-        .footer-links a { 
-            color: var(--red); text-decoration: none; font-weight: 600; text-transform: uppercase; 
-            font-size: 14px; font-family: 'Oswald', sans-serif; letter-spacing: 1.2px; transition: 0.2s;
-        }
+        .footer-links a { color: var(--red); text-decoration: none; font-weight: 600; text-transform: uppercase; font-size: 14px; font-family: 'Oswald', sans-serif; letter-spacing: 1.2px; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -157,16 +152,14 @@
     <div class="stripes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
     <div class="masthead-inner">
         <a class="brand-group" onclick="showSection('titulares')">
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/250px-Club_Athletic_Bilbao_logo.svg.png" class="brand-logo" alt="Athletic Club Logo">
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/250px-Club_Athletic_Bilbao_logo.svg.png" class="brand-logo" alt="Athletic Logo">
             <div>
                 <h1 class="brand">San Mamés <em>Hoy</em></h1>
                 <div class="brand-sub">TODA LA ACTUALIDAD DEL ATHLETIC EN EL MISMO LUGAR</div>
             </div>
         </a>
         
-        <div class="bookmark-notice">
-            ⭐ Pulsa <b>Ctrl + D</b> para añadir a favoritos
-        </div>
+        <div class="bookmark-notice">⭐ <b>Ctrl + D</b> para favoritos</div>
 
         <button class="theme-toggle" id="themeBtn" onclick="toggleDarkMode()">Modo Oscuro</button>
     </div>
@@ -178,18 +171,14 @@
             <div class="toolbar"><h2>Última Hora</h2><button style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updateNews(true)">Actualizar</button></div>
             <div class="chips-container" id="newsChipsHome"></div>
             <div id="newsListHome"></div>
-            <div class="load-more-container">
-                <button class="btn-red-main" onclick="showSection('noticias')">Ver más noticias (Hemeroteca)</button>
-            </div>
+            <div class="load-more-container"><button class="btn-red-main" onclick="showSection('noticias')">Ver Hemeroteca</button></div>
         </section>
 
         <section id="sec-noticias" class="content-section">
             <div class="toolbar"><h2>Hemeroteca</h2></div>
             <div class="chips-container" id="newsChipsFull"></div>
             <div id="fullNewsList"></div>
-            <div class="load-more-container" id="newsLoadMoreBtn">
-                <button class="btn-red-main" onclick="increaseNewsLimit()">Cargar noticias anteriores</button>
-            </div>
+            <div class="load-more-container" id="newsLoadMoreBtn"><button class="btn-red-main" onclick="increaseNewsLimit()">Cargar más</button></div>
         </section>
 
         <section id="sec-podcasts" class="content-section">
@@ -199,33 +188,24 @@
                 <iframe src="https://www.ivoox.com/player_es_podcast_721276_zp_1.html?c1=800506" width="100%" height="400" frameborder="0" loading="lazy"></iframe>
             </div>
             <div id="podcastListHome"></div>
-            <div class="load-more-container">
-                <button class="btn-red-main" onclick="showSection('radio')">Ver más audios (Archivo)</button>
-            </div>
         </section>
 
         <section id="sec-radio" class="content-section">
             <div class="toolbar"><h2>Archivo de Radio</h2></div>
             <div class="chips-container" id="podcastChipsFull"></div>
             <div id="fullPodcastList"></div>
-            <div class="load-more-container" id="podLoadMoreBtn">
-                <button class="btn-red-main" onclick="increasePodLimit()">Cargar audios anteriores</button>
-            </div>
+            <div class="load-more-container" id="podLoadMoreBtn"><button class="btn-red-main" onclick="increasePodLimit()">Cargar más audios</button></div>
         </section>
 
         <section id="sec-clasificacion" class="content-section">
             <div class="toolbar"><h2>Clasificación</h2></div>
-            <div class="centered-widget-box">
-                <iframe src="https://futbolweb.net/embed/clasificacion" width="360" height="720" style="border:0;max-width:100%;border-radius:16px;background:#fff;" loading="lazy"></iframe>
-            </div>
+            <div class="centered-widget-box"><iframe src="https://futbolweb.net/embed/clasificacion" width="100%" height="700" style="border:0;background:#fff;border-radius:12px;"></iframe></div>
         </section>
 
         <section id="sec-partidos" class="content-section">
             <div class="toolbar"><h2>Partidos</h2></div>
-            <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
-                <iframe src="https://futbolweb.net/embed/equipo/athletic-club/proxima" width="360" height="200" style="border:0;max-width:100%;border-radius:16px;background:#fff" loading="lazy"></iframe>
-                <iframe src="https://futbolweb.net/embed/equipo/athletic-club/ultima" width="360" height="200" style="border:0;max-width:100%;border-radius:16px;background:#fff" loading="lazy"></iframe>
-            </div>
+            <iframe src="https://futbolweb.net/embed/equipo/athletic-club/proxima" width="100%" height="200" style="border:0;margin-bottom:20px;"></iframe>
+            <iframe src="https://futbolweb.net/embed/equipo/athletic-club/ultima" width="100%" height="200" style="border:0;"></iframe>
         </section>
     </main>
 
@@ -248,7 +228,6 @@
             <div id="podcastManager"></div>
         </div>
 
-        <!-- COMPARTIR WEB RESTAURADO -->
         <div class="sidebar-box">
             <h3>Compartir Web</h3>
             <div class="share-grid">
@@ -270,21 +249,14 @@
 </div>
 
 <footer class="site-footer">
-    <div class="footer-content">
-        <p>SAN MAMÉS HOY · Agregador independiente para aficionados del Athletic Club.</p>
-        <div class="footer-links">
-            <a href="mailto:athletic4k@gmail.com">athletic4k@gmail.com</a>
-            <a href="https://www.youtube.com/@HistoriaATH" target="_blank">YouTube: HistoriaATH</a>
-        </div>
+    <div class="footer-links">
+        <a href="mailto:athletic4k@gmail.com">athletic4k@gmail.com</a>
+        <a href="https://www.youtube.com/@HistoriaATH" target="_blank">YouTube: HistoriaATH</a>
     </div>
 </footer>
 
 <script>
-    const LOGOS = {
-        'elcorreo': "https://static.vocstatic.com/voc26/latest/assets/images/logos/logo-elcorreo.svg",
-        'europapress': "https://s01.europapress.net/imagenes/estaticos/europa-press.png"
-    };
-
+    const LOGOS = { 'elcorreo': "https://static.vocstatic.com/voc26/latest/assets/images/logos/logo-elcorreo.svg", 'europapress': "https://s01.europapress.net/imagenes/estaticos/europa-press.png" };
     const PROXY = 'https://athletic-rss-proxy.danelpuente22.workers.dev/';
     let newsLimit = 15, podLimit = 15;
 
@@ -297,33 +269,22 @@
     ];
 
     let podcastSources = [
-        { id: 'bilbosport', name: 'BILBOSPORT', enabled: true, type: 'widget' },
+        { id: 'bilbosport', name: 'BILBOSPORT', enabled: true },
         { id: 'oye', name: 'OYE COMO VA', url: 'https://radiopopular.com/xml/oye-como-va', enabled: true },
-        { id: 'bacalao', name: 'LA EMOCIÓN DEL BACALAO', url: 'https://radiopopular.com/xml/la-emocion-del-bacalao', enabled: true },
-        { id: 'ser', name: 'SER DEPORTIVOS BILBAO', url: 'https://fapi-top.prisasd.com/podcast/playser/ser_deportivos_bilbao/itunestfp/podcast.xml', enabled: true },
-        { id: 'movida', name: 'LA MOVIDA DEPORTIVA', url: 'https://feeds.ivoox.com/feed_fg_f1223355_filtro_1.xml', enabled: true },
-        { id: 'tribuna', name: 'LA TRIBUNA DEL ATHLETIC', url: 'https://feeds.ivoox.com/feed_fg_f11240203_filtro_1.xml', enabled: true }
+        { id: 'gabarra', name: 'LA GABARRA', url: 'https://radiopopular.com/xml/la-gabarra', enabled: true },
+        { id: 'ser', name: 'SER DEPORTIVOS BILBAO', url: 'https://fapi-top.prisasd.com/podcast/playser/ser_deportivos_bilbao/itunestfp/podcast.xml', enabled: true }
     ];
 
     let allNews = [], allPodcasts = [];
     let activeNewsFilter = 'ALL', activePodcastFilter = 'ALL';
 
-    // --- COMPARTIR ---
     function shareOn(platform) {
         const url = window.location.href;
-        const text = "Toda la actualidad del Athletic en el mismo lugar.";
-        if (platform !== 'copy' && navigator.share) {
-            navigator.share({ title: 'San Mamés Hoy', text: text, url: url }).catch(() => {});
-            return;
-        }
-        switch(platform) {
-            case 'whatsapp': window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`); break;
-            case 'twitter': window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`); break;
-            case 'copy': navigator.clipboard.writeText(url); alert("Enlace copiado al portapapeles"); break;
-        }
+        if (platform === 'whatsapp') window.open(`https://api.whatsapp.com/send?text=${url}`);
+        if (platform === 'twitter') window.open(`https://twitter.com/intent/tweet?url=${url}`);
+        if (platform === 'copy') { navigator.clipboard.writeText(url); alert("Enlace copiado"); }
     }
 
-    // --- CONFIGURACIÓN Y MEMORIA ---
     function toggleDarkMode() {
         const isDark = document.body.classList.toggle('dark-mode');
         localStorage.setItem('theme_pref', isDark ? 'dark' : 'light');
@@ -375,7 +336,6 @@
         }
     }
 
-    // --- RSS LOGIC ---
     async function fetchXML(url) {
         try {
             const res = await fetch(`${PROXY}?url=${encodeURIComponent(url)}`);
@@ -406,9 +366,7 @@
                     }
                 }
                 const link = isAtom ? (n.querySelector('link[rel="alternate"]')?.getAttribute('href') || n.querySelector('link')?.getAttribute('href')) : n.querySelector('link')?.textContent;
-                let title = n.querySelector('title')?.textContent || '';
-                title = title.replace(/^(Athletic Club|Athletic|El Correo|Marca|Mundo Deportivo|Europa Press)\s*[:|]\s*/i, '').trim();
-                return { title, link, date: n.querySelector('pubDate, published, updated')?.textContent || new Date(), image: img, source: s.name, isLogo: s.useLogo };
+                return { title: n.querySelector('title')?.textContent.replace(/^(Athletic Club|Athletic|El Correo|Marca)\s*[:|]\s*/i, '').trim(), link, date: n.querySelector('pubDate, published, updated')?.textContent || new Date(), image: img, source: s.name, isLogo: s.useLogo };
             });
         }));
         allNews = results.flat().sort((a,b) => new Date(b.date) - new Date(a.date));
