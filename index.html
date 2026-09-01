@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>San Mamés Hoy — Athletic Club</title>
     
-    <!-- LOGO EN LA PESTAÑA (FAVICON) -->
-    <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/32px-Club_Athletic_Bilbao_logo.svg.png">
+    <!-- IDENTIDAD VISUAL Y COMPARTIR -->
+    <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/250px-Club_Athletic_Bilbao_logo.svg.png">
+    <meta property="og:title" content="San Mamés Hoy — Athletic Club">
+    <meta property="og:description" content="Toda la actualidad del Athletic en el mismo lugar. Prensa, radio y resultados.">
+    <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/250px-Club_Athletic_Bilbao_logo.svg.png">
+    <meta property="og:url" content="https://sanmames-hoy.vercel.app">
+    <meta name="twitter:card" content="summary_large_image">
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Source+Serif+4:wght@400;600&display=swap');
@@ -43,12 +48,11 @@
         }
         
         .brand-group { display: flex; align-items: center; gap: 20px; cursor: pointer; text-decoration: none; }
-        .brand-logo { height: 75px; width: auto; filter: drop-shadow(0 0 5px rgba(255,255,255,0.1)); }
+        .brand-logo { height: 75px; width: auto; }
         .brand { color: #fff; margin: 0; font-size: clamp(24px, 6vw, 42px); line-height: 0.9; text-transform: uppercase; }
         .brand em { color: var(--red); font-style: normal; }
         .brand-sub { color: #A9A498; font-size: 11px; letter-spacing: 1.2px; margin-top: 8px; text-transform: uppercase; font-weight: 600; }
 
-        /* Recordatorio Marcadores */
         .bookmark-notice {
             color: #C9A498;
             font-size: 11px;
@@ -59,20 +63,20 @@
             border-radius: 4px;
             text-align: center;
         }
-        .bookmark-notice b { color: #fff; }
 
-        /* Layout Dos Columnas */
+        /* Layout */
         .main-wrapper { max-width: 1100px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 280px; gap: 40px; }
 
-        /* Sidebar Inteligente */
+        /* Sidebar */
         .sidebar { position: sticky; top: 20px; height: fit-content; }
         .sidebar-box { background: #fff; border: 1px solid var(--line); border-radius: 4px; padding: 15px 0; margin-bottom: 20px; }
         .sidebar-box h3 { padding: 0 20px; margin: 0 0 10px; font-size: 13px; text-transform: uppercase; color: var(--steel); border-bottom: 1px solid var(--line); padding-bottom: 5px; }
+        
         .nav-item { padding: 12px 20px; cursor: pointer; text-transform: uppercase; font-weight: 600; font-size: 15px; display: flex; align-items: center; border-left: 4px solid transparent; transition: 0.2s; color: var(--ink); text-decoration: none; }
         .nav-item:hover { background: var(--paper); }
         .nav-item.active { border-left-color: var(--red); color: var(--red); background: var(--paper); }
         
-        /* Gestores de Medios */
+        /* Gestión */
         .source-toggle { display: flex; align-items: center; justify-content: space-between; padding: 5px 20px; margin-bottom: 8px; font-size: 10.5px; text-transform: uppercase; font-weight: 600; }
         .switch { position: relative; display: inline-block; width: 30px; height: 16px; }
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -81,24 +85,15 @@
         input:checked + .slider { background-color: var(--red); }
         input:checked + .slider:before { transform: translateX(14px); }
 
-        /* Botón Flotante Youtube */
-        .youtube-float {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background: var(--ink);
-            color: #fff;
-            padding: 12px 20px;
-            border-radius: 50px;
-            text-decoration: none;
-            display: flex;
-            align-items: center; gap: 10px;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 600; text-transform: uppercase; font-size: 11px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            z-index: 9999; transition: 0.3s; border: 2px solid var(--red);
+        /* Compartir */
+        .share-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px 20px; }
+        .share-btn { 
+            background: var(--paper); border: 1px solid var(--line); border-radius: 4px; padding: 10px; 
+            cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px;
+            font-size: 10px; text-transform: uppercase; font-weight: bold; color: var(--ink); transition: 0.2s;
         }
-        .youtube-float:hover { background: var(--red); transform: translateY(-3px); }
+        .share-btn:hover { background: var(--red); color: #fff; border-color: var(--red); }
+        .share-btn svg { width: 18px; height: 18px; fill: currentColor; }
 
         /* Contenido */
         .content-section { display: none; min-width: 0; }
@@ -110,19 +105,18 @@
         .chip { background: #fff; border: 1px solid var(--line); padding: 6px 14px; border-radius: 20px; font-size: 11px; cursor: pointer; text-transform: uppercase; }
         .chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
 
-        /* Listados */
+        /* Estilo Listados */
         .story-group { border-bottom: 1px solid var(--line); padding: 20px 0; animation: fadeIn 0.3s ease; }
         .story-main { display: grid; grid-template-columns: 140px 1fr; gap: 20px; }
         .item-thumb { width: 140px; height: 140px; object-fit: cover; border-radius: 4px; background: var(--paper-dim); border: 1px solid var(--line); }
         .item-thumb.is-logo { background: #fff; object-fit: contain; padding: 15px; }
         .item-meta { font-size: 11px; color: var(--steel); text-transform: uppercase; margin-bottom: 5px; font-family: 'Oswald'; }
-        .item-meta b { color: var(--red); font-weight: 700; letter-spacing: 0.5px; }
+        .item-meta b { color: var(--red); font-weight: 700; }
         .story-title { font-size: 20px; font-weight: 600; line-height: 1.2; margin: 0 0 10px; }
         .story-title a { color: var(--ink); text-decoration: none; }
         
         audio { width: 100%; height: 35px; margin-top: 10px; }
 
-        /* Paginación y Widgets */
         .load-more-container { text-align: center; padding: 40px 0; }
         .btn-red-main { background: var(--red); color: #fff; border: none; padding: 12px 30px; cursor: pointer; font-weight: 700; border-radius: 2px; text-transform: uppercase; font-size: 13px; transition: 0.2s; }
         .btn-red-main:hover { background: var(--red-dark); }
@@ -134,13 +128,20 @@
         .footer-links { display: flex; justify-content: center; gap: 30px; margin-top: 20px; flex-wrap: wrap; }
         .footer-links a { color: var(--red); text-decoration: none; font-weight: 600; text-transform: uppercase; font-size: 14px; }
 
+        .youtube-float {
+            position: fixed; bottom: 25px; right: 25px; background: var(--ink); color: #fff; padding: 12px 20px;
+            border-radius: 50px; text-decoration: none; display: flex; align-items: center; gap: 10px;
+            font-family: 'Oswald', sans-serif; font-weight: 600; text-transform: uppercase; font-size: 11px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; transition: 0.3s; border: 2px solid var(--red);
+        }
+        .youtube-float:hover { background: var(--red); transform: translateY(-3px); }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         @media (max-width: 850px) {
             .main-wrapper { grid-template-columns: 1fr; }
             .sidebar { position: static; }
             .masthead-inner { flex-direction: column; text-align: center; }
-            .brand-logo { height: 60px; }
             .bookmark-notice { display: none; }
             .story-main { grid-template-columns: 100px 1fr; }
             .item-thumb { width: 100px; height: 100px; }
@@ -156,7 +157,7 @@
             <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/250px-Club_Athletic_Bilbao_logo.svg.png" class="brand-logo" alt="Athletic Club Logo">
             <div>
                 <h1 class="brand">San Mamés <em>Hoy</em></h1>
-                <div class="brand-sub">TODAS LAS NOTICIAS DEL ATHLETIC EN UN SOLO LUGAR</div>
+                <div class="brand-sub">TODA LA ACTUALIDAD DEL ATHLETIC EN EL MISMO LUGAR</div>
             </div>
         </a>
         
@@ -190,7 +191,7 @@
 
         <!-- PORTADA PODCASTS -->
         <section id="sec-podcasts" class="content-section">
-            <div class="toolbar"><h2>Podcasts</h2><button style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updatePodcasts(true)">Actualizar</button></div>
+            <div class="toolbar"><h2>Podcasts</h2><button class="btn-red" style="padding: 6px 12px; font-size: 10px;" onclick="updatePodcasts(true)">Actualizar</button></div>
             <div class="chips-container" id="podcastChipsHome"></div>
             <div id="bilboPlayerHome" style="display:none; margin-bottom:20px; background:#fff; padding:10px; border-radius:8px; border:1px solid var(--line);">
                 <iframe src="https://www.ivoox.com/player_es_podcast_721276_zp_1.html?c1=800506" width="100%" height="400" frameborder="0" allowfullscreen="" scrolling="no" loading="lazy"></iframe>
@@ -201,7 +202,7 @@
             </div>
         </section>
 
-        <!-- ARCHIVO RADIO COMPLETO -->
+        <!-- ARCHIVO DE RADIO -->
         <section id="sec-radio" class="content-section">
             <div class="toolbar"><h2>Archivo de Radio</h2></div>
             <div class="chips-container" id="podcastChipsFull"></div>
@@ -240,13 +241,34 @@
             <div class="nav-item" data-sec="clasificacion" onclick="showSection('clasificacion')">Clasificación</div>
             <div class="nav-item" data-sec="partidos" onclick="showSection('partidos')">Partidos</div>
         </div>
+
         <div class="sidebar-box" id="newsManagerBox">
             <h3>Gestionar Medios</h3>
             <div id="newsManager"></div>
         </div>
+
         <div class="sidebar-box" id="podcastManagerBox" style="display:none;">
             <h3>Gestionar Radio</h3>
             <div id="podcastManager"></div>
+        </div>
+
+        <!-- COMPARTIR -->
+        <div class="sidebar-box">
+            <h3>Compartir Web</h3>
+            <div class="share-grid">
+                <div class="share-btn" onclick="shareOn('whatsapp')">
+                    <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.483 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.308 1.656zm6.757-4.02c1.535.912 3.033 1.397 4.542 1.398 5.403 0 9.8-4.398 9.802-9.8.001-2.618-1.02-5.08-2.871-6.932-1.851-1.852-4.313-2.873-6.931-2.873-5.403 0-9.802 4.398-9.802 9.8 0 1.761.507 3.479 1.467 4.975l-1.09 3.979 4.083-1.071z"/></svg>
+                    WhatsApp
+                </div>
+                <div class="share-btn" onclick="shareOn('twitter')">
+                    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 7.689 8.502 11.236h-6.657l-5.204-6.864-5.965 6.864H1.45l7.731-8.232L1.15 2.25h6.827l4.695 6.195 5.572-6.195zm-1.16 17.025h1.833L7.045 4.126H5.078L17.084 19.275z"/></svg>
+                    X
+                </div>
+                <div class="share-btn" onclick="shareOn('copy')">
+                    <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                    Link
+                </div>
+            </div>
         </div>
     </aside>
 </div>
@@ -296,6 +318,29 @@
     let allNews = [], allPodcasts = [];
     let activeNewsFilter = 'ALL', activePodcastFilter = 'ALL';
 
+    function shareOn(platform) {
+        const url = window.location.href;
+        const text = "Toda la actualidad del Athletic en el mismo lugar.";
+        
+        if (platform !== 'copy' && navigator.share) {
+            navigator.share({ title: 'San Mamés Hoy', text: text, url: url }).catch(() => {});
+            return;
+        }
+
+        switch(platform) {
+            case 'whatsapp':
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`);
+                break;
+            case 'twitter':
+                window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
+                break;
+            case 'copy':
+                navigator.clipboard.writeText(url);
+                alert("Enlace copiado al portapapeles");
+                break;
+        }
+    }
+
     async function fetchXML(url) {
         try {
             const res = await fetch(`${PROXY}?url=${encodeURIComponent(url)}`);
@@ -319,16 +364,14 @@
                 let img = s.useLogo ? LOGOS[s.id] : null;
                 if (!s.useLogo) {
                     img = n.getElementsByTagNameNS("*", "content")[0]?.getAttribute('url') || 
-                          n.getElementsByTagNameNS("*", "thumbnail")[0]?.getAttribute('url') ||
                           n.querySelector('enclosure')?.getAttribute('url');
-                    
                     if(!img) {
                         const blob = n.querySelector('description, summary, content')?.textContent || '';
                         const match = blob.match(/src="([^">]+\.(?:jpg|jpeg|png|webp|gif))"/i);
                         if(match) img = match[1];
                     }
                 }
-                const link = isAtom ? n.querySelector('link[rel="alternate"]')?.getAttribute('href') : n.querySelector('link')?.textContent;
+                const link = isAtom ? (n.querySelector('link[rel="alternate"]')?.getAttribute('href') || n.querySelector('link')?.getAttribute('href')) : n.querySelector('link')?.textContent;
                 let title = n.querySelector('title')?.textContent || '';
                 title = title.replace(/^(Athletic Club|Athletic|El Correo|Marca|Mundo Deportivo|Europa Press)\s*[:|]\s*/i, '').trim();
                 return { title, link, date: n.querySelector('pubDate, published, updated')?.textContent || new Date(), image: img, source: s.name, isLogo: s.useLogo };
@@ -433,5 +476,9 @@
 
     renderManagers(); updateNews();
 </script>
+
+<!-- Vercel Analytics -->
+<script defer src="/_vercel/insights/script.js"></script>
+
 </body>
 </html>
