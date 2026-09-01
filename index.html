@@ -184,14 +184,14 @@
 <div class="main-wrapper">
     <main>
         <section id="sec-titulares" class="content-section active">
-            <div class="toolbar"><h2>Última Hora</h2><button style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updateNews(true)">Actualizar</button></div>
+            <div class="toolbar"><h2>Última Hora</h2><button id="btnUpdateNews" style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updateNews(true)">Actualizar</button></div>
             <div class="chips-container" id="newsChipsHome"></div>
             <div id="newsListHome"></div>
             <div id="infinite-scroll-trigger">Cargando más noticias...</div>
         </section>
 
         <section id="sec-podcasts" class="content-section">
-            <div class="toolbar"><h2>Podcasts</h2><button style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updatePodcasts(true)">Actualizar</button></div>
+            <div class="toolbar"><h2>Podcasts</h2><button id="btnUpdatePods" style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updatePodcasts(true)">Actualizar</button></div>
             <div class="chips-container" id="podcastChipsHome"></div>
             <div id="bilboPlayerHome" style="display:none; margin-bottom:20px; background:var(--bg-card); padding:10px; border-radius:8px; border:1px solid var(--line);">
                 <iframe src="https://www.ivoox.com/player_es_podcast_721276_zp_1.html?c1=800506" width="100%" height="400" frameborder="0"></iframe>
@@ -316,21 +316,28 @@
             document.getElementById('newsManagerBox').style.display = (id === 'titulares') ? 'block' : 'none';
             document.getElementById('podcastManagerBox').style.display = (id === 'podcasts') ? 'block' : 'none';
             document.body.classList.toggle('mode-full-width', id === 'mercado');
-            if(id === 'titulares') updateNews();
-            else if(id === 'podcasts') updatePodcasts();
+            if(id === 'titulares' && allNews.length === 0) updateNews();
+            else if(id === 'podcasts' && allPodcasts.length === 0) updatePodcasts();
             window.scrollTo(0,0);
         }
     }
 
     async function fetchXML(url) {
         try {
-            const res = await fetch(`${PROXY}?url=${encodeURIComponent(url)}`);
+            // Timeout de 6 segundos para no bloquear la carga si un medio falla
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 6000);
+            const res = await fetch(`${PROXY}?url=${encodeURIComponent(url)}`, { signal: controller.signal });
+            clearTimeout(timeoutId);
             if (res.ok) return new DOMParser().parseFromString(await res.text(), "text/xml");
-        } catch (e) {} return null;
+        } catch (e) { console.warn("Error cargando fuente:", url); } 
+        return null;
     }
 
     async function updateNews(force = false) {
-        if (!force && allNews.length > 0) { renderNewsData(); return; }
+        const btn = document.getElementById('btnUpdateNews');
+        if(force) btn.innerText = "Actualizando...";
+        
         const enabled = newsSources.filter(s => s.enabled);
         const results = await Promise.all(enabled.map(async s => {
             const xml = await fetchXML(s.url);
@@ -342,31 +349,21 @@
                           n.querySelector('enclosure')?.getAttribute('url') ||
                           n.getElementsByTagNameNS("*", "content")[0]?.getAttribute('url') ||
                           n.querySelector('media\\:content, content')?.getAttribute('url');
-                    if (!img) {
-                        const content = n.querySelector('description, encoded')?.textContent || '';
-                        const match = content.match(/src=["']([^"']+\.(?:jpg|jpeg|png|webp|gif))["']/i);
-                        if (match) img = match[1];
-                    }
                 }
                 let link = n.querySelector('link')?.textContent || n.querySelector('link')?.getAttribute('href');
-                if (n.querySelector('link[rel="alternate"]')) link = n.querySelector('link[rel="alternate"]').getAttribute('href');
                 return { title: n.querySelector('title')?.textContent.replace(/^(Athletic Club|Athletic|El Correo|Marca|Naiz|Europa Press)\s*[:|]\s*/i, '').trim(), link, date: n.querySelector('pubDate, published, updated')?.textContent || new Date(), image: img, source: s.name, isLogo: s.useLogo };
             });
         }));
         allNews = results.flat().sort((a,b) => new Date(b.date) - new Date(a.date));
+        if(force) btn.innerText = "Actualizar";
         renderNewsData();
         renderNewsChips();
     }
 
     function renderNewsData() {
-        let filtered = allNews.filter(i => newsSources.find(s => s.name === i.source && s.enabled));
-        if (activeNewsFilter !== 'ALL') {
-             if (!newsSources.find(s => s.name === activeNewsFilter && s.enabled)) {
-                activeNewsFilter = 'ALL';
-             } else {
-                filtered = filtered.filter(i => i.source === activeNewsFilter);
-             }
-        }
+        const enabledNames = newsSources.filter(s => s.enabled).map(s => s.name);
+        let filtered = allNews.filter(i => enabledNames.includes(i.source));
+        if (activeNewsFilter !== 'ALL') filtered = filtered.filter(i => i.source === activeNewsFilter);
         document.getElementById('newsListHome').innerHTML = filtered.slice(0, newsLimit).map(i => createItemHTML(i)).join('');
     }
 
@@ -378,7 +375,9 @@
     }
 
     async function updatePodcasts(force = false) {
-        if (!force && allPodcasts.length > 0) { renderPodcastsData(); return; }
+        const btn = document.getElementById('btnUpdatePods');
+        if(force) btn.innerText = "Actualizando...";
+
         const rssEnabled = podcastSources.filter(s => s.enabled && s.url);
         const results = await Promise.all(rssEnabled.map(async s => {
             const xml = await fetchXML(s.url);
@@ -389,6 +388,7 @@
             }));
         }));
         allPodcasts = results.flat().sort((a,b) => new Date(b.date) - new Date(a.date));
+        if(force) btn.innerText = "Actualizar";
         renderPodcastsData();
         renderPodcastChips();
     }
@@ -396,13 +396,7 @@
     function renderPodcastsData() {
         const enabledNames = podcastSources.filter(s => s.enabled).map(s => s.name);
         let filtered = allPodcasts.filter(i => enabledNames.includes(i.source));
-        if (activePodcastFilter !== 'ALL') {
-            if (!enabledNames.includes(activePodcastFilter)) {
-                activePodcastFilter = 'ALL';
-            } else {
-                filtered = filtered.filter(i => i.source === activePodcastFilter);
-            }
-        }
+        if (activePodcastFilter !== 'ALL') filtered = filtered.filter(i => i.source === activePodcastFilter);
         document.getElementById('bilboPlayerHome').style.display = (enabledNames.includes('BILBOSPORT') && (activePodcastFilter === 'ALL' || activePodcastFilter === 'BILBOSPORT')) ? 'block' : 'none';
         document.getElementById('podcastListHome').innerHTML = filtered.slice(0, 30).map(pod => createItemHTML(pod, true)).join('');
     }
@@ -425,18 +419,22 @@
     observer.observe(document.getElementById('infinite-scroll-trigger'));
 
     function toggleNewsSource(id) { 
-        let src = newsSources.find(s=>s.id===id);
+        let src = newsSources.find(s => s.id === id);
         src.enabled = !src.enabled; 
         savePreferences(); 
-        updateNews(true); // Recarga y renderiza
+        // Actualización inmediata sin recargar de red para que sea fluido
+        renderNewsData(); 
+        renderNewsChips();
         renderManagers(); 
     }
 
     function togglePodcastSource(id) { 
-        let src = podcastSources.find(s=>s.id===id);
+        let src = podcastSources.find(s => s.id === id);
         src.enabled = !src.enabled; 
         savePreferences(); 
-        updatePodcasts(true); // Recarga y renderiza
+        // Actualización inmediata
+        renderPodcastsData(); 
+        renderPodcastChips();
         renderManagers(); 
     }
 
