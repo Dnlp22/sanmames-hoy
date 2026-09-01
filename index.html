@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Mamés Hoy — Athletic Club</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Source+Serif+4:wght@400;600&display=swap');
+
+        :root {
+            --red: #E3241A;
+            --red-dark: #B01B14;
+            --ink: #161311;
+            --paper: #F3F1EA;
+            --paper-dim: #E7E3D8;
+            --steel: #565D63;
+            --line: rgba(22,19,17,0.14);
+        }
+
+        * { box-sizing: border-box; }
+        body { background: var(--paper); color: var(--ink); font-family: 'Source Serif 4', Georgia, serif; line-height: 1.5; margin: 0; -webkit-font-smoothing: antialiased; }
+        h1, h2, h3, .brand, button, .chip, .nav-item, .source-label { font-family: 'Oswald', sans-serif; }
+
+        /* Cabecera */
+        .masthead { background: var(--ink); border-bottom: 4px solid var(--red); }
+        .stripes { display: flex; height: 8px; }
+        .stripes span { flex: 1; }
+        .stripes span:nth-child(odd) { background: var(--red); }
+        .stripes span:nth-child(even) { background: #fff; }
+        .masthead-inner { max-width: 1100px; margin: 0 auto; padding: 25px 20px; cursor: pointer; }
+        .brand { color: #fff; margin: 0; font-size: clamp(28px, 7vw, 42px); line-height: 0.9; text-transform: uppercase; }
+        .brand em { color: var(--red); font-style: normal; }
+        .brand-sub { color: #A9A498; font-size: 11px; letter-spacing: 1.2px; margin-top: 8px; text-transform: uppercase; font-weight: 600; }
+
+        /* Layout */
+        .main-wrapper { max-width: 1100px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 280px; gap: 40px; }
+
+        /* Sidebar */
+        .sidebar { position: sticky; top: 20px; height: fit-content; }
+        .sidebar-box { background: #fff; border: 1px solid var(--line); border-radius: 4px; padding: 15px 0; margin-bottom: 20px; }
+        .sidebar-box h3 { padding: 0 20px; margin: 0 0 10px; font-size: 13px; text-transform: uppercase; color: var(--steel); border-bottom: 1px solid var(--line); padding-bottom: 5px; }
+        .nav-item { padding: 12px 20px; cursor: pointer; text-transform: uppercase; font-weight: 600; font-size: 15px; display: flex; align-items: center; border-left: 4px solid transparent; transition: 0.2s; color: var(--ink); text-decoration: none; }
+        .nav-item:hover { background: var(--paper); }
+        .nav-item.active { border-left-color: var(--red); color: var(--red); background: var(--paper); }
+        
+        .source-toggle { display: flex; align-items: center; justify-content: space-between; padding: 5px 20px; margin-bottom: 8px; font-size: 10.5px; text-transform: uppercase; font-weight: 600; }
+        .switch { position: relative; display: inline-block; width: 30px; height: 16px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 10px; width: 10px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--red); }
+        input:checked + .slider:before { transform: translateX(14px); }
+
+        /* Contenido */
+        .content-section { display: none; min-width: 0; }
+        .content-section.active { display: block; }
+        .toolbar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin-bottom: 15px; }
+        .toolbar h2 { margin: 0; font-size: 20px; text-transform: uppercase; }
+
+        .chips-container { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 25px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+        .chip { background: #fff; border: 1px solid var(--line); padding: 6px 14px; border-radius: 20px; font-size: 11px; cursor: pointer; text-transform: uppercase; }
+        .chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+        /* Listados */
+        .story-group { border-bottom: 1px solid var(--line); padding: 20px 0; animation: fadeIn 0.3s ease; }
+        .story-main { display: grid; grid-template-columns: 140px 1fr; gap: 20px; }
+        .item-thumb { width: 140px; height: 140px; object-fit: cover; border-radius: 4px; background: var(--paper-dim); border: 1px solid var(--line); }
+        .item-thumb.is-logo { background: #fff; object-fit: contain; padding: 15px; }
+        
+        .item-meta { font-size: 11px; color: var(--steel); text-transform: uppercase; margin-bottom: 5px; font-family: 'Oswald'; }
+        .item-meta b { color: var(--red); font-weight: 700; letter-spacing: 0.5px; }
+        .story-title { font-size: 20px; font-weight: 600; line-height: 1.2; margin: 0 0 10px; }
+        .story-title a { color: var(--ink); text-decoration: none; }
+        
+        audio { width: 100%; height: 35px; margin-top: 10px; }
+
+        /* Botón Ver Más */
+        .load-more-container { text-align: center; padding: 30px 0; }
+        .btn-more { background: var(--red); color: #fff; border: none; padding: 12px 30px; cursor: pointer; font-weight: 700; border-radius: 2px; text-transform: uppercase; font-size: 13px; transition: 0.2s; }
+        .btn-more:hover { background: var(--red-dark); }
+
+        /* Widgets */
+        .centered-widget-box { background: #fff; padding: 20px 10px; border-radius: 8px; border: 1px solid var(--line); text-align: center; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @media (max-width: 850px) {
+            .main-wrapper { grid-template-columns: 1fr; }
+            .sidebar { position: static; }
+            .story-main { grid-template-columns: 100px 1fr; }
+            .item-thumb { width: 100px; height: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="masthead">
+    <div class="stripes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="masthead-inner" onclick="showSection('titulares')">
+        <h1 class="brand">SAN MAMÉS <em>HOY</em></h1>
+        <div class="brand-sub">TODAS LAS NOTICIAS DEL ATHLETIC EN UN SOLO LUGAR</div>
+    </div>
+</div>
+
+<div class="main-wrapper">
+    <main>
+        <!-- SECCIÓN TITULARES -->
+        <section id="sec-titulares" class="content-section active">
+            <div class="toolbar"><h2>Titulares</h2><button style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updateNews(true)">Actualizar</button></div>
+            <div class="chips-container" id="newsChips"></div>
+            <div id="newsList"></div>
+            <div class="load-more-container" id="newsMoreBtn">
+                <button class="btn-more" onclick="increaseNewsLimit()">Ver más noticias</button>
+            </div>
+        </section>
+
+        <!-- SECCIÓN PODCASTS -->
+        <section id="sec-podcasts" class="content-section">
+            <div class="toolbar"><h2>Podcasts</h2><button style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updatePodcasts(true)">Actualizar</button></div>
+            <div class="chips-container" id="podcastChips"></div>
+            <div id="bilboPlayerContainer" style="display:none; margin-bottom:20px; background:#fff; padding:10px; border-radius:8px; border:1px solid var(--line);">
+                <iframe src="https://www.ivoox.com/player_es_podcast_721276_zp_1.html?c1=800506" width="100%" height="400" frameborder="0" allowfullscreen="" scrolling="no" loading="lazy"></iframe>
+            </div>
+            <div id="podcastList"></div>
+            <div class="load-more-container" id="podMoreBtn">
+                <button class="btn-more" onclick="increasePodLimit()">Ver más episodios</button>
+            </div>
+        </section>
+
+        <!-- CLASIFICACIÓN -->
+        <section id="sec-clasificacion" class="content-section">
+            <div class="toolbar"><h2>Clasificación</h2></div>
+            <div class="centered-widget-box">
+                <iframe src="https://futbolweb.net/embed/clasificacion" width="360" height="720" style="border:0;max-width:100%;border-radius:16px;background:#fff; display: block; margin: 0 auto;" loading="lazy"></iframe>
+            </div>
+        </section>
+
+        <!-- PARTIDOS -->
+        <section id="sec-partidos" class="content-section">
+            <div class="toolbar"><h2>Partidos</h2></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+                <iframe src="https://futbolweb.net/embed/equipo/athletic-club/proxima" width="360" height="200" style="border:0;max-width:100%;border-radius:16px;background:#fff" loading="lazy"></iframe>
+                <iframe src="https://futbolweb.net/embed/equipo/athletic-club/ultima" width="360" height="200" style="border:0;max-width:100%;border-radius:16px;background:#fff" loading="lazy"></iframe>
+            </div>
+        </section>
+    </main>
+
+    <aside class="sidebar">
+        <div class="sidebar-box">
+            <h3>Secciones</h3>
+            <div class="nav-item active" data-sec="titulares" onclick="showSection('titulares')">Titulares</div>
+            <div class="nav-item" data-sec="podcasts" onclick="showSection('podcasts')">Podcasts</div>
+            <div class="nav-item" data-sec="clasificacion" onclick="showSection('clasificacion')">Clasificación</div>
+            <div class="nav-item" data-sec="partidos" onclick="showSection('partidos')">Partidos</div>
+        </div>
+        <div class="sidebar-box" id="newsManagerBox">
+            <h3>Medios (Noticias)</h3>
+            <div id="newsManager"></div>
+        </div>
+        <div class="sidebar-box" id="podcastManagerBox" style="display:none;">
+            <h3>Radio (Podcasts)</h3>
+            <div id="podcastManager"></div>
+        </div>
+    </aside>
+</div>
+
+<script>
+    const LOGOS = {
+        'elcorreo': "https://static.vocstatic.com/voc26/latest/assets/images/logos/logo-elcorreo.svg",
+        'europapress': "https://s01.europapress.net/imagenes/estaticos/europa-press.png"
+    };
+
+    const PROXY = 'https://athletic-rss-proxy.danelpuente22.workers.dev/';
+    let newsLimit = 15;
+    let podLimit = 15;
+
+    let newsSources = [
+        { id: 'elcorreo', name: 'EL CORREO', url: 'https://www.elcorreo.com/rss/atom/?section=/athletic', enabled: true, useLogo: true },
+        { id: 'marca', name: 'MARCA', url: 'https://e00-marca.uecdn.es/rss/futbol/athletic.xml', enabled: true },
+        { id: 'mundo', name: 'MUNDO DEPORTIVO', url: 'https://www.mundodeportivo.com/feed/rss/futbol/athletic-bilbao', enabled: true },
+        { id: 'naiz', name: 'NAIZ', url: 'https://www.naiz.eus/es/rss/sections/info/kirolak/futbola/athletic.rss', enabled: true },
+        { id: 'europapress', name: 'EUROPA PRESS', url: 'https://www.europapress.es/rss/rss.aspx?buscar=athletic-de-bilbao', enabled: true, useLogo: true }
+    ];
+
+    let podcastSources = [
+        { id: 'bilbosport', name: 'BILBOSPORT', enabled: true, type: 'widget' },
+        { id: 'oye', name: 'OYE COMO VA', url: 'https://radiopopular.com/xml/oye-como-va', enabled: true },
+        { id: 'bacalao', name: 'LA EMOCIÓN DEL BACALAO', url: 'https://radiopopular.com/xml/la-emocion-del-bacalao', enabled: true },
+        { id: 'ser', name: 'SER DEPORTIVOS BILBAO', url: 'https://fapi-top.prisasd.com/podcast/playser/ser_deportivos_bilbao/itunestfp/podcast.xml', enabled: true },
+        { id: 'movida', name: 'LA MOVIDA DEPORTIVA', url: 'https://feeds.ivoox.com/feed_fg_f1223355_filtro_1.xml', enabled: true },
+        { id: 'tribuna', name: 'LA TRIBUNA DEL ATHLETIC', url: 'https://feeds.ivoox.com/feed_fg_f11240203_filtro_1.xml', enabled: true }
+    ];
+
+    let allNews = [], allPodcasts = [];
+    let activeNewsFilter = 'ALL', activePodcastFilter = 'ALL';
+
+    async function fetchXML(url) {
+        try {
+            const res = await fetch(`${PROXY}?url=${encodeURIComponent(url)}`);
+            if (res.ok) return new DOMParser().parseFromString(await res.text(), "text/xml");
+        } catch (e) {} return null;
+    }
+
+    function formatTime(dateStr) {
+        const d = new Date(dateStr);
+        return d.toDateString() === new Date().toDateString() ? d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false }) : d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
+    }
+
+    async function updateNews(force = false) {
+        if (!force && allNews.length > 0) { renderNewsData(); return; }
+        const enabled = newsSources.filter(s => s.enabled);
+        const results = await Promise.all(enabled.map(async s => {
+            const xml = await fetchXML(s.url);
+            if (!xml) return [];
+            const isAtom = xml.getElementsByTagName('entry').length > 0;
+            return Array.from(xml.querySelectorAll(isAtom ? 'entry' : 'item')).map(n => {
+                let img = s.useLogo ? LOGOS[s.id] : null;
+                if (!s.useLogo) {
+                    img = n.getElementsByTagNameNS("*", "content")[0]?.getAttribute('url') || n.querySelector('enclosure')?.getAttribute('url');
+                    if(!img) {
+                        const blob = n.querySelector('description, summary, content')?.textContent || '';
+                        const match = blob.match(/src="([^">]+\.(?:jpg|jpeg|png|webp|gif))"/i);
+                        if(match) img = match[1];
+                    }
+                }
+                const link = isAtom ? n.querySelector('link[rel="alternate"]')?.getAttribute('href') : n.querySelector('link')?.textContent;
+                let title = n.querySelector('title')?.textContent || '';
+                title = title.replace(/^(Athletic Club|Athletic|El Correo|Marca|Mundo Deportivo|Europa Press)\s*[:|]\s*/i, '').trim();
+                return { title, link, date: n.querySelector('pubDate, published, updated')?.textContent || new Date(), image: img, source: s.name, isLogo: s.useLogo };
+            });
+        }));
+        allNews = results.flat().sort((a,b) => new Date(b.date) - new Date(a.date));
+        renderNewsData();
+        renderNewsChips();
+    }
+
+    function renderNewsData() {
+        let filtered = allNews.filter(i => newsSources.find(s => s.name === i.source && s.enabled));
+        if (activeNewsFilter !== 'ALL') filtered = filtered.filter(i => i.source === activeNewsFilter);
+        
+        document.getElementById('newsList').innerHTML = filtered.slice(0, newsLimit).map(item => `
+            <article class="story-group"><div class="story-main">
+                <img src="${item.image || 'https://via.placeholder.com/140?text=ATHLETIC'}" class="item-thumb ${item.isLogo ? 'is-logo' : ''}" onerror="this.src='https://via.placeholder.com/140?text=ATHLETIC'">
+                <div><div class="item-meta"><b>${item.source}</b> · ${formatTime(item.date)}</div><h3 class="story-title"><a href="${item.link}" target="_blank">${item.title}</a></h3></div>
+            </div></article>`).join('');
+        
+        document.getElementById('newsMoreBtn').style.display = (newsLimit < filtered.length) ? 'block' : 'none';
+    }
+
+    function increaseNewsLimit() { newsLimit += 15; renderNewsData(); }
+
+    async function updatePodcasts(force = false) {
+        if (!force && allPodcasts.length > 0) { renderPodcastsData(); return; }
+        const rssEnabled = podcastSources.filter(s => s.enabled && s.url);
+        const results = await Promise.all(rssEnabled.map(async s => {
+            const xml = await fetchXML(s.url);
+            if (!xml) return [];
+            return Array.from(xml.querySelectorAll('item')).map(n => ({
+                title: n.querySelector('title')?.textContent || '',
+                link: n.querySelector('link')?.textContent || '',
+                audio: n.querySelector('enclosure')?.getAttribute('url'),
+                date: n.querySelector('pubDate')?.textContent || new Date(),
+                source: s.name
+            }));
+        }));
+        allPodcasts = results.flat().sort((a,b) => new Date(b.date) - new Date(a.date));
+        renderPodcastsData();
+        renderPodcastChips();
+    }
+
+    function renderPodcastsData() {
+        const container = document.getElementById('podcastList');
+        const bilboBox = document.getElementById('bilboPlayerContainer');
+        const enabledNames = podcastSources.filter(s => s.enabled).map(s => s.name);
+        
+        let filtered = allPodcasts.filter(i => enabledNames.includes(i.source));
+        if (activePodcastFilter !== 'ALL') filtered = filtered.filter(i => i.source === activePodcastFilter);
+
+        bilboBox.style.display = (activePodcastFilter === 'ALL' || activePodcastFilter === 'BILBOSPORT') && enabledNames.includes('BILBOSPORT') ? 'block' : 'none';
+        
+        container.innerHTML = filtered.slice(0, podLimit).map(pod => `
+            <article class="story-group"><div class="podcast-main">
+                <div class="item-meta"><b>${pod.source}</b> · ${formatTime(pod.date)}</div><h3 class="story-title"><a href="${pod.link}" target="_blank">${pod.title}</a></h3>
+                ${pod.audio ? `<audio controls preload="none" src="${pod.audio}"></audio>` : ''}
+            </div></article>`).join('');
+            
+        document.getElementById('podMoreBtn').style.display = (podLimit < filtered.length) ? 'block' : 'none';
+    }
+
+    function increasePodLimit() { podLimit += 15; renderPodcastsData(); }
+
+    function showSection(id) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById('sec-' + id).classList.add('active');
+        document.querySelector(`.nav-item[data-sec="${id}"]`)?.classList.add('active');
+
+        document.getElementById('newsManagerBox').style.display = (id === 'titulares') ? 'block' : 'none';
+        document.getElementById('podcastManagerBox').style.display = (id === 'podcasts') ? 'block' : 'none';
+
+        if(id === 'titulares') { newsLimit = 15; updateNews(); }
+        else if(id === 'podcasts') { podLimit = 15; updatePodcasts(); }
+        window.scrollTo(0,0);
+    }
+
+    function renderNewsChips() {
+        const enabled = newsSources.filter(s => s.enabled);
+        document.getElementById('newsChips').innerHTML = [{name:'ALL', label:'TODAS'}, ...enabled].map(s => `<div class="chip ${activeNewsFilter === s.name ? 'active' : ''}" onclick="activeNewsFilter='${s.name}'; newsLimit=15; renderNewsData(); renderNewsChips();">${s.label || s.name}</div>`).join('');
+    }
+
+    function renderPodcastChips() {
+        const enabled = podcastSources.filter(s => s.enabled);
+        document.getElementById('podcastChips').innerHTML = [{name:'ALL', label:'TODOS'}, ...enabled].map(s => `<div class="chip ${activePodcastFilter === s.name ? 'active' : ''}" onclick="activePodcastFilter='${s.name}'; podLimit=15; renderPodcastsData(); renderPodcastChips();">${s.label || s.name}</div>`).join('');
+    }
+
+    function toggleNewsSource(id) { newsSources.find(s=>s.id===id).enabled = !newsSources.find(s=>s.id===id).enabled; updateNews(true); }
+    function togglePodcastSource(id) { podcastSources.find(s=>s.id===id).enabled = !podcastSources.find(s=>s.id===id).enabled; updatePodcasts(true); }
+
+    function renderManagers() {
+        const gen = (list, fn) => list.map(s => `<div class="source-toggle"><span>${s.name}</span><label class="switch"><input type="checkbox" ${s.enabled?'checked':''} onchange="${fn}('${s.id}')"><span class="slider"></span></label></div>`).join('');
+        document.getElementById('newsManager').innerHTML = gen(newsSources, 'toggleNewsSource');
+        document.getElementById('podcastManager').innerHTML = gen(podcastSources, 'togglePodcastSource');
+    }
+
+    renderManagers(); updateNews();
+</script>
+</body>
+</html>
