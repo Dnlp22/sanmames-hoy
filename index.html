@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>San Mamés Hoy — Athletic Club</title>
     
-    <!-- FAVICON -->
+    <!-- LOGO EN LA PESTAÑA (FAVICON) -->
     <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/32px-Club_Athletic_Bilbao_logo.svg.png">
 
     <style>
@@ -42,12 +42,13 @@
             gap: 20px; 
         }
         
-        .brand-group { display: flex; align-items: center; gap: 20px; cursor: pointer; }
-        .brand-logo { height: 75px; width: auto; }
+        .brand-group { display: flex; align-items: center; gap: 20px; cursor: pointer; text-decoration: none; }
+        .brand-logo { height: 75px; width: auto; filter: drop-shadow(0 0 5px rgba(255,255,255,0.1)); }
         .brand { color: #fff; margin: 0; font-size: clamp(24px, 6vw, 42px); line-height: 0.9; text-transform: uppercase; }
         .brand em { color: var(--red); font-style: normal; }
         .brand-sub { color: #A9A498; font-size: 11px; letter-spacing: 1.2px; margin-top: 8px; text-transform: uppercase; font-weight: 600; }
 
+        /* Recordatorio Marcadores */
         .bookmark-notice {
             color: #C9A498;
             font-size: 11px;
@@ -60,10 +61,10 @@
         }
         .bookmark-notice b { color: #fff; }
 
-        /* Layout */
+        /* Layout Dos Columnas */
         .main-wrapper { max-width: 1100px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 280px; gap: 40px; }
 
-        /* Sidebar */
+        /* Sidebar Inteligente */
         .sidebar { position: sticky; top: 20px; height: fit-content; }
         .sidebar-box { background: #fff; border: 1px solid var(--line); border-radius: 4px; padding: 15px 0; margin-bottom: 20px; }
         .sidebar-box h3 { padding: 0 20px; margin: 0 0 10px; font-size: 13px; text-transform: uppercase; color: var(--steel); border-bottom: 1px solid var(--line); padding-bottom: 5px; }
@@ -71,6 +72,7 @@
         .nav-item:hover { background: var(--paper); }
         .nav-item.active { border-left-color: var(--red); color: var(--red); background: var(--paper); }
         
+        /* Gestores de Medios */
         .source-toggle { display: flex; align-items: center; justify-content: space-between; padding: 5px 20px; margin-bottom: 8px; font-size: 10.5px; text-transform: uppercase; font-weight: 600; }
         .switch { position: relative; display: inline-block; width: 30px; height: 16px; }
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -138,6 +140,7 @@
             .main-wrapper { grid-template-columns: 1fr; }
             .sidebar { position: static; }
             .masthead-inner { flex-direction: column; text-align: center; }
+            .brand-logo { height: 60px; }
             .bookmark-notice { display: none; }
             .story-main { grid-template-columns: 100px 1fr; }
             .item-thumb { width: 100px; height: 100px; }
@@ -149,13 +152,13 @@
 <div class="masthead">
     <div class="stripes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
     <div class="masthead-inner">
-        <div class="brand-group" onclick="showSection('titulares')">
+        <a class="brand-group" onclick="showSection('titulares')">
             <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/250px-Club_Athletic_Bilbao_logo.svg.png" class="brand-logo" alt="Athletic Club Logo">
             <div>
                 <h1 class="brand">San Mamés <em>Hoy</em></h1>
                 <div class="brand-sub">TODAS LAS NOTICIAS DEL ATHLETIC EN UN SOLO LUGAR</div>
             </div>
-        </div>
+        </a>
         
         <div class="bookmark-notice">
             ⭐ Pulsa <b>Ctrl + D</b> para añadir a favoritos y no perder la pagina
@@ -165,7 +168,7 @@
 
 <div class="main-wrapper">
     <main>
-        <!-- PORTADA TITULARES -->
+        <!-- SECCIÓN TITULARES -->
         <section id="sec-titulares" class="content-section active">
             <div class="toolbar"><h2>Última Hora</h2><button style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updateNews(true)">Actualizar</button></div>
             <div class="chips-container" id="newsChipsHome"></div>
@@ -318,13 +321,14 @@
                     img = n.getElementsByTagNameNS("*", "content")[0]?.getAttribute('url') || 
                           n.getElementsByTagNameNS("*", "thumbnail")[0]?.getAttribute('url') ||
                           n.querySelector('enclosure')?.getAttribute('url');
+                    
                     if(!img) {
                         const blob = n.querySelector('description, summary, content')?.textContent || '';
                         const match = blob.match(/src="([^">]+\.(?:jpg|jpeg|png|webp|gif))"/i);
                         if(match) img = match[1];
                     }
                 }
-                const link = isAtom ? (n.querySelector('link[rel="alternate"]')?.getAttribute('href') || n.querySelector('link')?.getAttribute('href')) : n.querySelector('link')?.textContent;
+                const link = isAtom ? n.querySelector('link[rel="alternate"]')?.getAttribute('href') : n.querySelector('link')?.textContent;
                 let title = n.querySelector('title')?.textContent || '';
                 title = title.replace(/^(Athletic Club|Athletic|El Correo|Marca|Mundo Deportivo|Europa Press)\s*[:|]\s*/i, '').trim();
                 return { title, link, date: n.querySelector('pubDate, published, updated')?.textContent || new Date(), image: img, source: s.name, isLogo: s.useLogo };
@@ -338,12 +342,8 @@
     function renderNewsData() {
         let filtered = allNews.filter(i => newsSources.find(s => s.name === i.source && s.enabled));
         if (activeNewsFilter !== 'ALL') filtered = filtered.filter(i => i.source === activeNewsFilter);
-        
-        const htmlHome = filtered.slice(0, 15).map(i => createItemHTML(i)).join('');
-        const htmlFull = filtered.slice(0, newsLimit).map(i => createItemHTML(i)).join('');
-        
-        document.getElementById('newsListHome').innerHTML = htmlHome;
-        document.getElementById('fullNewsList').innerHTML = htmlFull;
+        document.getElementById('newsListHome').innerHTML = filtered.slice(0, 15).map(i => createItemHTML(i)).join('');
+        document.getElementById('fullNewsList').innerHTML = filtered.slice(0, newsLimit).map(i => createItemHTML(i)).join('');
         document.getElementById('newsLoadMoreBtn').style.display = (newsLimit < filtered.length) ? 'block' : 'none';
     }
 
@@ -376,13 +376,16 @@
     }
 
     function renderPodcastsData() {
+        const bilboPlayerHome = document.getElementById('bilboPlayerHome');
+        const bilboPlayerFull = document.getElementById('bilboPlayerFull');
         const enabledNames = podcastSources.filter(s => s.enabled).map(s => s.name);
+        
         let filtered = allPodcasts.filter(i => enabledNames.includes(i.source));
         if (activePodcastFilter !== 'ALL') filtered = filtered.filter(i => i.source === activePodcastFilter);
 
         const showBilbo = (activePodcastFilter === 'ALL' || activePodcastFilter === 'BILBOSPORT') && enabledNames.includes('BILBOSPORT');
-        document.getElementById('bilboPlayerHome').style.display = showBilbo ? 'block' : 'none';
-        document.getElementById('bilboPlayerFull').style.display = showBilbo ? 'block' : 'none';
+        bilboPlayerHome.style.display = showBilbo ? 'block' : 'none';
+        bilboPlayerFull.style.display = showBilbo ? 'block' : 'none';
         
         document.getElementById('podcastListHome').innerHTML = filtered.slice(0, 15).map(pod => createItemHTML(pod, true)).join('');
         document.getElementById('fullPodcastList').innerHTML = filtered.slice(0, podLimit).map(pod => createItemHTML(pod, true)).join('');
