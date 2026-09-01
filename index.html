@@ -80,7 +80,7 @@
             text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* Layout */
+        /* Layout Dinámico */
         .main-wrapper { max-width: 1100px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 280px; gap: 40px; transition: all 0.3s ease; }
 
         body.mode-full-width .main-wrapper { max-width: 98%; grid-template-columns: 1fr; }
@@ -105,6 +105,7 @@
         input:checked + .slider { background-color: var(--red); }
         input:checked + .slider:before { transform: translateX(14px); }
 
+        /* COMPARTIR WEB */
         .share-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px 20px; }
         .share-btn { 
             background: var(--paper-dim); border: 1px solid var(--line); border-radius: 4px; padding: 12px 5px; 
@@ -141,7 +142,7 @@
 
         .site-footer { margin-top: 50px; padding: 60px 20px; border-top: 1px solid var(--line); text-align: center; background: var(--bg-card); }
         .footer-links { display: flex; justify-content: center; gap: 30px; margin-top: 20px; flex-wrap: wrap; }
-        .footer-links a { color: var(--red); text-decoration: none; font-weight: 600; text-transform: uppercase; font-size: 13px; font-family: 'Oswald'; }
+        .footer-links a { color: var(--red); text-decoration: none; font-weight: 600; text-transform: uppercase; font-size: 14px; font-family: 'Oswald'; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -165,6 +166,7 @@
             <h1 class="brand">San Mamés <em>Hoy</em></h1>
         </a>
 
+        <!-- Navegación Horizontal (Modo Full Width) -->
         <nav id="header-nav-h">
             <a class="nav-link-h" onclick="showSection('titulares')">Titulares</a>
             <a class="nav-link-h" onclick="showSection('podcasts')">Podcasts</a>
@@ -223,10 +225,10 @@
             </div>
         </section>
 
-        <!-- SECCIÓN PARTIDOS -->
-        <section id="sec-partidos" class="content-section">
+        <!-- SECCIÓN PARTIDOS (Arreglada con padding extra) -->
+        <section id="sec-partidos" class="content-section" style="padding-bottom: 80px;">
             <div class="toolbar"><h2>Partidos</h2></div>
-            <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:30px;">
                 <iframe src="https://futbolweb.net/embed/equipo/athletic-club/proxima" width="360" height="200" style="border:0;max-width:100%;border-radius:16px;background:#fff"></iframe>
                 <iframe src="https://futbolweb.net/embed/equipo/athletic-club/ultima" width="360" height="200" style="border:0;max-width:100%;border-radius:16px;background:#fff"></iframe>
             </div>
@@ -253,6 +255,7 @@
             <div id="podcastManager"></div>
         </div>
 
+        <!-- COMPARTIR WEB -->
         <div class="sidebar-box">
             <h3>Compartir Web</h3>
             <div class="share-grid">
@@ -263,7 +266,7 @@
                     <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 7.689 8.502 11.236h-6.657l-5.204-6.864-5.965 6.864H1.45l7.731-8.232L1.15 2.25h6.827l4.695 6.195 5.572-6.195zm-1.16 17.025h1.833L7.045 4.126H5.078L17.084 19.275z"/></svg>X
                 </div>
                 <div class="share-btn" onclick="shareOn('copy')" title="Copiar enlace">
-                    <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>Link
+                    <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>Enlace
                 </div>
             </div>
         </div>
@@ -302,19 +305,12 @@
     let allNews = [], allPodcasts = [];
     let activeNewsFilter = 'ALL', activePodcastFilter = 'ALL';
 
-    // --- FUNCIÓN DE FECHA Y HORA CORREGIDA ---
     function formatTime(dateStr) {
         const d = new Date(dateStr);
         if (isNaN(d)) return '';
         const today = new Date();
-        const isToday = d.getDate() === today.getDate() &&
-                        d.getMonth() === today.getMonth() &&
-                        d.getFullYear() === today.getFullYear();
-        if (isToday) {
-            return d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-        } else {
-            return d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
-        }
+        const isToday = d.getDate() === today.getDate() && d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
+        return isToday ? d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) : d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
     }
 
     function showSection(id) {
@@ -362,11 +358,7 @@
                 }
                 let link = n.querySelector('link')?.textContent || n.querySelector('link')?.getAttribute('href');
                 if (n.querySelector('link[rel="alternate"]')) link = n.querySelector('link[rel="alternate"]').getAttribute('href');
-                return { 
-                    title: n.querySelector('title')?.textContent.replace(/^(Athletic Club|Athletic|El Correo|Marca|Naiz|Europa Press)\s*[:|]\s*/i, '').trim(), 
-                    link, date: n.querySelector('pubDate, published, updated')?.textContent || new Date(), 
-                    image: img, source: s.name, isLogo: s.useLogo 
-                };
+                return { title: n.querySelector('title')?.textContent.replace(/^(Athletic Club|Athletic|El Correo|Marca|Naiz|Europa Press)\s*[:|]\s*/i, '').trim(), link, date: n.querySelector('pubDate, published, updated')?.textContent || new Date(), image: img, source: s.name, isLogo: s.useLogo };
             });
         }));
         allNews = results.flat().sort((a,b) => new Date(b.date) - new Date(a.date));
@@ -428,8 +420,8 @@
     }, { threshold: 0.1 });
     observer.observe(document.getElementById('infinite-scroll-trigger'));
 
-    function toggleNewsSource(id) { newsSources.find(s=>s.id===id).enabled = !newsSources.find(s=>s.id===id).enabled; savePreferences(); updateNews(true); }
-    function togglePodcastSource(id) { podcastSources.find(s=>s.id===id).enabled = !podcastSources.find(s=>s.id===id).enabled; savePreferences(); updatePodcasts(true); }
+    function toggleNewsSource(id) { newsSources.find(s=>s.id===id).enabled = !newsSources.find(s=>s.id===id).enabled; savePreferences(); updateNews(true); renderManagers(); }
+    function togglePodcastSource(id) { podcastSources.find(s=>s.id===id).enabled = !podcastSources.find(s=>s.id===id).enabled; savePreferences(); updatePodcasts(true); renderManagers(); }
 
     function toggleDarkMode() {
         const isDark = document.body.classList.toggle('dark-mode');
