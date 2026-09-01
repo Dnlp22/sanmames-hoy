@@ -281,7 +281,6 @@
         { id: 'as', name: 'DIARIO AS', url: 'https://rss.app/feeds/xVJ1LM9eQPJHmcsu.xml', enabled: true },
         { id: 'desmarque', name: 'EL DESMARQUE', url: 'https://rss.app/feeds/HDaRU3kWojOwqVVo.xml', enabled: true },
         { id: 'sport', name: 'SPORT', url: 'https://rss.app/feeds/MUIm1us37xmqw6TE.xml', enabled: true },
-        { id: 'relevo', name: 'RELEVO', url: 'https://rss.app/feeds/rxPpCYR7ZIySnuSM.xml', enabled: true },
         { id: 'deia', name: 'DEIA', url: 'https://rss.app/feeds/xuSamSQmSS1gtFTM.xml', enabled: true },
         { id: 'cantera', name: 'LA CANTERA DE LEZAMA', url: 'https://rss.app/feeds/y29dkHHQdxhcPvdw.xml', enabled: true },
         { id: 'naiz', name: 'NAIZ', url: 'https://www.naiz.eus/es/rss/sections/info/kirolak/futbola/athletic.rss', enabled: true },
@@ -365,7 +364,7 @@
                 let link = n.querySelector('link')?.textContent || n.querySelector('link')?.getAttribute('href');
                 let titleText = n.querySelector('title')?.textContent || '';
                 return { 
-                    title: titleText.replace(/^(Athletic Club|Athletic|El Correo|Marca|Diario AS|As|Sport|Naiz|Europa Press|ETB Kirolak|ETB|La Cantera de Lezama|Estadio Deportivo|Fútbol Fantasy|Futbol Fantasy|El Diario Vasco|Diario Vasco|El Desmarque|Relevo|Deia)\s*[:|]\s*/i, '').trim(), 
+                    title: titleText.replace(/^(Athletic Club|Athletic|El Correo|Marca|Diario AS|As|Sport|Naiz|Europa Press|ETB Kirolak|ETB|La Cantera de Lezama|Estadio Deportivo|Fútbol Fantasy|Futbol Fantasy|El Diario Vasco|Diario Vasco|El Desmarque|Deia)\s*[:|]\s*/i, '').trim(), 
                     link, date: n.querySelector('pubDate, published, updated')?.textContent || new Date(), 
                     image: img, source: s.name, isLogo: s.useLogo 
                 };
