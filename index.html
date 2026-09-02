@@ -277,6 +277,7 @@
         { id: 'elcorreo', name: 'EL CORREO', url: 'https://www.elcorreo.com/rss/atom/?section=/athletic', enabled: true, useLogo: true },
         { id: 'etb', name: 'ETB KIROLAK', url: 'https://rss.app/feeds/DXEgMiGIkrh2G0HS.xml', enabled: true },
         { id: 'radiopopular', name: 'RADIO POPULAR', url: 'https://rss.app/feeds/b3WOiJ9n8Iip4Yrk.xml', enabled: true },
+        { id: 'berria', name: 'BERRIA', url: 'https://rss.app/feeds/YgZftYYdcfDAGry4.xml', enabled: true },
         { id: 'marca', name: 'MARCA', url: 'https://e00-marca.uecdn.es/rss/futbol/athletic.xml', enabled: true },
         { id: 'as', name: 'DIARIO AS', url: 'https://rss.app/feeds/xVJ1LM9eQPJHmcsu.xml', enabled: true },
         { id: 'desmarque', name: 'EL DESMARQUE', url: 'https://rss.app/feeds/HDaRU3kWojOwqVVo.xml', enabled: true },
@@ -361,7 +362,7 @@
                 let link = n.querySelector('link')?.textContent || n.querySelector('link')?.getAttribute('href');
                 let titleText = n.querySelector('title')?.textContent || '';
                 return { 
-                    title: titleText.replace(/^(Athletic Club|Athletic|El Correo|Marca|Diario AS|As|Naiz|ETB Kirolak|ETB|Radio Popular|La Cantera de Lezama|Estadio Deportivo|Fútbol Fantasy|Futbol Fantasy|El Desmarque|Deia)\s*[:|]\s*/i, '').trim(), 
+                    title: titleText.replace(/^(Athletic Club|Athletic|El Correo|Marca|Diario AS|As|Naiz|ETB Kirolak|ETB|Radio Popular|Berria|La Cantera de Lezama|Estadio Deportivo|Fútbol Fantasy|Futbol Fantasy|El Desmarque|Deia)\s*[:|]\s*/i, '').trim(), 
                     link, date: n.querySelector('pubDate, published, updated')?.textContent || new Date(), 
                     image: img, source: s.name, isLogo: s.useLogo 
                 };
