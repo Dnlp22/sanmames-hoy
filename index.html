@@ -43,7 +43,6 @@
         body { background: var(--bg-body); color: var(--ink); font-family: 'Source Serif 4', Georgia, serif; line-height: 1.5; margin: 0; -webkit-font-smoothing: antialiased; transition: background 0.3s; }
         h1, h2, h3, .brand, button, .chip, .nav-item, .nav-link-h, .source-label, .bookmark-notice, .cat-tab { font-family: 'Oswald', sans-serif; }
 
-        /* Cabecera */
         .masthead { background: #161311; border-bottom: 4px solid var(--red); position: sticky; top: 0; z-index: 1000; }
         .stripes { display: flex; height: 8px; }
         .stripes span { flex: 1; }
@@ -80,7 +79,6 @@
             text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* Tabs de Categoría */
         .category-tabs { display: flex; gap: 20px; margin-bottom: 20px; border-bottom: 2px solid var(--line); }
         .cat-tab { 
             padding: 10px 5px; cursor: pointer; text-transform: uppercase; font-weight: 700; 
@@ -88,7 +86,6 @@
         }
         .cat-tab.active { color: var(--red); border-bottom-color: var(--red); }
 
-        /* Layout Dinámico */
         .main-wrapper { max-width: 1100px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 280px; gap: 40px; transition: all 0.3s ease; }
 
         .sidebar { position: sticky; top: 120px; height: fit-content; }
@@ -111,7 +108,6 @@
         .load-more-container { display: flex; justify: center; padding: 30px 0; }
         .btn-ver-mas { background: var(--red); color: #fff; border: none; padding: 12px 30px; font-family: 'Oswald'; text-transform: uppercase; cursor: pointer; border-radius: 4px; font-weight: 600; font-size: 14px; letter-spacing: 1px; transition: 0.2s; }
 
-        /* COMPARTIR */
         .share-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px 20px; }
         .share-btn { 
             background: var(--paper-dim); border: 1px solid var(--line); border-radius: 4px; padding: 12px 5px; 
@@ -139,17 +135,11 @@
         .story-title { font-size: 18px; font-weight: 600; line-height: 1.2; margin: 0 0 10px; }
         .story-title a { color: var(--ink); text-decoration: none; }
         
-        /* MEJORA AUDIO PLAYER */
         audio { width: 100%; height: 35px; margin-top: 10px; border-radius: 6px; }
         body.dark-mode audio { filter: invert(100%) hue-rotate(180deg) brightness(1.5); }
 
         .site-footer { margin-top: 50px; padding: 60px 20px; border-top: 1px solid var(--line); text-align: center; background: var(--bg-card); }
         .footer-links a { color: var(--red); text-decoration: none; font-weight: 600; text-transform: uppercase; font-size: 14px; font-family: 'Oswald'; }
-
-        .management-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-        @media (max-width: 600px) { .management-grid { grid-template-columns: 1fr; } }
-        .mgmt-card { background: var(--bg-card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-        .mgmt-header { background: var(--paper-dim); padding: 10px 20px; font-family: 'Oswald'; text-transform: uppercase; font-size: 14px; border-bottom: 1px solid var(--line); }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -170,13 +160,10 @@
             <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/250px-Club_Athletic_Bilbao_logo.svg.png" class="brand-logo" alt="Athletic Logo">
             <h1 class="brand">San Mamés <em>Hoy</em></h1>
         </a>
-
         <nav id="header-nav-h">
             <a class="nav-link-h" onclick="showSection('titulares')">Titulares</a>
             <a class="nav-link-h" onclick="showSection('podcasts')">Podcasts</a>
-            <a class="nav-link-h" onclick="showSection('ajustes')">Ajustes</a>
         </nav>
-
         <div class="header-actions">
             <div class="bookmark-notice">⭐ Ctrl + D</div>
             <button class="theme-toggle" id="themeBtn" onclick="toggleDarkMode()">Modo Oscuro</button>
@@ -210,21 +197,6 @@
                 <button class="btn-ver-mas" onclick="loadMorePods()">Ver más podcasts</button>
             </div>
         </section>
-
-        <section id="sec-ajustes" class="content-section">
-            <div class="toolbar"><h2>Configuración de Medios</h2></div>
-            <p>Elige qué fuentes quieres ver en la web. Los cambios se guardan automáticamente en este dispositivo.</p>
-            <div class="management-grid">
-                <div class="mgmt-card">
-                    <div class="mgmt-header">Prensa Escrita</div>
-                    <div id="newsManagerMain"></div>
-                </div>
-                <div class="mgmt-card">
-                    <div class="mgmt-header">Radio y Podcasts</div>
-                    <div id="podcastManagerMain"></div>
-                </div>
-            </div>
-        </section>
     </main>
 
     <aside class="sidebar">
@@ -232,7 +204,6 @@
             <h3>Secciones</h3>
             <div class="nav-item active" data-sec="titulares" onclick="showSection('titulares')">Titulares</div>
             <div class="nav-item" data-sec="podcasts" onclick="showSection('podcasts')">Podcasts</div>
-            <div class="nav-item" data-sec="ajustes" onclick="showSection('ajustes')">Ajustes</div>
         </div>
 
         <div class="sidebar-box" id="newsBoxSide">
@@ -250,6 +221,14 @@
             <div style="padding: 10px; text-align: center;">
                 <iframe src="https://futbolweb.net/embed/equipo/athletic-club/proxima" width="100%" height="180" style="border:0; border-radius:12px; background:#fff"></iframe>
                 <iframe src="https://futbolweb.net/embed/equipo/athletic-club/ultima" width="100%" height="180" style="border:0; border-radius:12px; background:#fff; margin-top:10px;"></iframe>
+            </div>
+        </div>
+
+        <!-- NUEVO WIDGET LEZAMA (BILBAO ATHLETIC) -->
+        <div class="sidebar-box" id="sidebarLezamaWidget" style="display:none;">
+            <h3>Bilbao Athletic TV</h3>
+            <div style="padding: 10px;">
+                <div class="ftv-widget" data-widget="agenda" data-theme="auto" data-team="326"><a href="https://www.futboltv.info/?utm_source=website&utm_medium=widget&utm_campaign=general">Próximos partidos en TV</a></div>
             </div>
         </div>
 
@@ -278,6 +257,8 @@
     </div>
 </footer>
 
+<script async src="https://www.futboltv.info/js/embed.js"></script>
+
 <script>
     const LOGOS = { 
         'elcorreo': "https://static.vocstatic.com/voc26/latest/assets/images/logos/logo-elcorreo.svg",
@@ -294,7 +275,7 @@
         { id: 'elcorreo', name: 'EL CORREO', url: 'https://www.elcorreo.com/rss/atom/?section=/athletic', enabled: true, useLogo: true, category: 'athletic' },
         { id: 'elcorreo_lezama', name: 'EL CORREO (LEZAMA)', url: 'https://rss.app/feeds/NQFfXxjeBxt2YjvZ.xml', enabled: true, useLogo: true, category: 'lezama' },
         { id: 'deia_lezama', name: 'DEIA (LEZAMA)', url: 'https://rss.app/feeds/KpXyaKYYd8VOwqcX.xml', enabled: true, category: 'lezama' },
-        { id: 'cantera', name: 'LA CANTERA DE LEZAMA', url: 'https://rss.app/feeds/y29dkHHQdxhcPvdw.xml', enabled: true, category: 'lezama' },
+        { id: 'cantera', name: 'LA CANTERA DE LEZAMA', url: 'https://rss.app/feeds/ohc68J64d7DTcb35.xml', enabled: true, category: 'lezama' },
         { id: 'etb', name: 'ETB KIROLAK', url: 'https://rss.app/feeds/DXEgMiGIkrh2G0HS.xml', enabled: true, category: 'athletic' },
         { id: 'marca', name: 'MARCA', url: 'https://e00-marca.uecdn.es/rss/futbol/athletic.xml', enabled: true, category: 'athletic' },
         { id: 'as', name: 'DIARIO AS', url: 'https://rss.app/feeds/xVJ1LM9eQPJHmcsu.xml', enabled: true, category: 'athletic' },
@@ -337,24 +318,40 @@
         newsLimit = 20;
         document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
         document.getElementById('tab-' + cat).classList.add('active');
+        
+        // GESTIÓN DINÁMICA DE LA BARRA LATERAL SEGÚN CATEGORÍA
+        const isAthletic = (cat === 'athletic');
+        document.getElementById('sidebarPartidos').style.display = isAthletic ? 'block' : 'none';
+        document.getElementById('sidebarClasificacion').style.display = isAthletic ? 'block' : 'none';
+        document.getElementById('sidebarLezamaWidget').style.display = isAthletic ? 'none' : 'block';
+
         renderNewsData();
         renderNewsChips();
+        renderManagers();
     }
 
     function showSection(id) {
         document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.nav-item, .nav-link-h').forEach(n => n.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         const target = document.getElementById('sec-' + id);
         if(target) {
             target.classList.add('active');
             document.querySelectorAll(`[data-sec="${id}"]`).forEach(n => n.classList.add('active'));
-            document.querySelectorAll(`.nav-link-h[onclick="showSection('${id}')"]`).forEach(n => n.classList.add('active'));
             localStorage.setItem('active_section', id);
+            
             document.getElementById('newsBoxSide').style.display = (id === 'titulares') ? 'block' : 'none';
             document.getElementById('podcastBoxSide').style.display = (id === 'podcasts') ? 'block' : 'none';
+            
             const isInicio = (id === 'titulares');
-            document.getElementById('sidebarPartidos').style.display = isInicio ? 'block' : 'none';
-            document.getElementById('sidebarClasificacion').style.display = isInicio ? 'block' : 'none';
+            if (isInicio) {
+                // Al volver a titulares, restauramos la visibilidad según la categoría activa
+                setCategory(activeCategory);
+            } else {
+                document.getElementById('sidebarPartidos').style.display = 'none';
+                document.getElementById('sidebarClasificacion').style.display = 'none';
+                document.getElementById('sidebarLezamaWidget').style.display = 'none';
+            }
+
             if(id === 'titulares' && allNews.length === 0) updateNews();
             else if(id === 'podcasts' && allPodcasts.length === 0) updatePodcasts();
             window.scrollTo(0,0);
@@ -506,11 +503,15 @@
     }
 
     function renderManagers() {
-        const gen = (list, fn) => list.map(s => `<div class="source-toggle"><span>${s.name}</span><label class="switch"><input type="checkbox" ${s.enabled?'checked':''} onchange="${fn}('${s.id}')"><span class="slider"></span></label></div>`).join('');
-        document.getElementById('newsManagerSide').innerHTML = gen(newsSources, 'toggleNewsSource');
+        const gen = (list, fn, filterCat = null) => {
+            let filtered = list;
+            if (filterCat) {
+                filtered = list.filter(s => s.category === filterCat || s.category === 'both');
+            }
+            return filtered.map(s => `<div class="source-toggle"><span>${s.name}</span><label class="switch"><input type="checkbox" ${s.enabled?'checked':''} onchange="${fn}('${s.id}')"><span class="slider"></span></label></div>`).join('');
+        };
+        document.getElementById('newsManagerSide').innerHTML = gen(newsSources, 'toggleNewsSource', activeCategory);
         document.getElementById('podcastManagerSide').innerHTML = gen(podcastSources, 'togglePodcastSource');
-        document.getElementById('newsManagerMain').innerHTML = gen(newsSources, 'toggleNewsSource');
-        document.getElementById('podcastManagerMain').innerHTML = gen(podcastSources, 'togglePodcastSource');
     }
 
     function shareOn(p) {
