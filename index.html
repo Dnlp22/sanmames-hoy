@@ -41,7 +41,7 @@
 
         * { box-sizing: border-box; }
         body { background: var(--bg-body); color: var(--ink); font-family: 'Source Serif 4', Georgia, serif; line-height: 1.5; margin: 0; -webkit-font-smoothing: antialiased; transition: background 0.3s; }
-        h1, h2, h3, .brand, button, .chip, .nav-item, .nav-link-h, .source-label, .bookmark-notice { font-family: 'Oswald', sans-serif; }
+        h1, h2, h3, .brand, button, .chip, .nav-item, .nav-link-h, .source-label, .bookmark-notice, .cat-tab { font-family: 'Oswald', sans-serif; }
 
         /* Cabecera */
         .masthead { background: #161311; border-bottom: 4px solid var(--red); position: sticky; top: 0; z-index: 1000; }
@@ -79,6 +79,14 @@
             padding: 8px 12px; cursor: pointer; border-radius: 4px; font-size: 10px;
             text-transform: uppercase; letter-spacing: 1px;
         }
+
+        /* Tabs de Categoría */
+        .category-tabs { display: flex; gap: 20px; margin-bottom: 20px; border-bottom: 2px solid var(--line); }
+        .cat-tab { 
+            padding: 10px 5px; cursor: pointer; text-transform: uppercase; font-weight: 700; 
+            font-size: 16px; color: var(--steel); border-bottom: 3px solid transparent; transition: 0.2s;
+        }
+        .cat-tab.active { color: var(--red); border-bottom-color: var(--red); }
 
         /* Layout Dinámico */
         .main-wrapper { max-width: 1100px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 1fr 280px; gap: 40px; transition: all 0.3s ease; }
@@ -179,6 +187,10 @@
 <div class="main-wrapper">
     <main>
         <section id="sec-titulares" class="content-section active">
+            <div class="category-tabs">
+                <div id="tab-athletic" class="cat-tab active" onclick="setCategory('athletic')">Athletic</div>
+                <div id="tab-lezama" class="cat-tab" onclick="setCategory('lezama')">Lezama</div>
+            </div>
             <div class="toolbar"><h2>Última Hora</h2><button id="btnUpdateNews" style="background:var(--red); color:#fff; border:none; padding: 6px 12px; font-size: 10px; cursor:pointer;" onclick="updateNews(true)">Actualizar</button></div>
             <div class="chips-container" id="newsChipsHome"></div>
             <div id="newsListHome"></div>
@@ -267,7 +279,10 @@
 </footer>
 
 <script>
-    const LOGOS = { 'elcorreo': "https://static.vocstatic.com/voc26/latest/assets/images/logos/logo-elcorreo.svg" };
+    const LOGOS = { 
+        'elcorreo': "https://static.vocstatic.com/voc26/latest/assets/images/logos/logo-elcorreo.svg",
+        'elcorreo_lezama': "https://static.vocstatic.com/voc26/latest/assets/images/logos/logo-elcorreo.svg"
+    };
     const DEFAULT_IMG = "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/250px-Club_Athletic_Bilbao_logo.svg.png";
     const PROXY = 'https://athletic-rss-proxy.danelpuente22.workers.dev/';
     
@@ -275,20 +290,20 @@
     let podcastLimit = 20;
 
     let newsSources = [
-        { id: 'oficial', name: 'ATHLETIC CLUB (OFICIAL)', url: 'https://rss.app/feeds/HPUWCyaBMDDDOoSG.xml', enabled: true },
-        { id: 'elcorreo', name: 'EL CORREO', url: 'https://www.elcorreo.com/rss/atom/?section=/athletic', enabled: true, useLogo: true },
-        { id: 'etb', name: 'ETB KIROLAK', url: 'https://rss.app/feeds/DXEgMiGIkrh2G0HS.xml', enabled: true },
-        { id: 'radiopopular', name: 'RADIO POPULAR', url: 'https://rss.app/feeds/b3WOiJ9n8Iip4Yrk.xml', enabled: true },
-        { id: 'berria', name: 'BERRIA', url: 'https://rss.app/feeds/YgZftYYdcfDAGry4.xml', enabled: true },
-        { id: 'marca', name: 'MARCA', url: 'https://e00-marca.uecdn.es/rss/futbol/athletic.xml', enabled: true },
-        { id: 'as', name: 'DIARIO AS', url: 'https://rss.app/feeds/xVJ1LM9eQPJHmcsu.xml', enabled: true },
-        { id: 'desmarque', name: 'EL DESMARQUE', url: 'https://rss.app/feeds/HDaRU3kWojOwqVVo.xml', enabled: true },
-        { id: 'deia', name: 'DEIA', url: 'https://rss.app/feeds/xuSamSQmSS1gtFTM.xml', enabled: true },
-        { id: 'cantera', name: 'LA CANTERA DE LEZAMA', url: 'https://rss.app/feeds/y29dkHHQdxhcPvdw.xml', enabled: true },
-        { id: 'naiz', name: 'NAIZ', url: 'https://www.naiz.eus/es/rss/sections/info/kirolak/futbola/athletic.rss', enabled: true },
-        { id: 'mundo', name: 'MUNDO DEPORTIVO', url: 'https://www.mundodeportivo.com/feed/rss/futbol/athletic-bilbao', enabled: true },
-        { id: 'futbolfantasy', name: 'FÚTBOL FANTASY', url: 'https://rss.app/feeds/lExVzxUUQvEGxXVv.xml', enabled: true },
-        { id: 'estadiodeportivo', name: 'ESTADIO DEPORTIVO', url: 'https://rss.app/feeds/7NZl6eSHt9Qhq64C.xml', enabled: true }
+        { id: 'oficial', name: 'ATHLETIC CLUB (OFICIAL)', url: 'https://rss.app/feeds/HPUWCyaBMDDDOoSG.xml', enabled: true, category: 'athletic' },
+        { id: 'elcorreo', name: 'EL CORREO', url: 'https://www.elcorreo.com/rss/atom/?section=/athletic', enabled: true, useLogo: true, category: 'athletic' },
+        { id: 'elcorreo_lezama', name: 'EL CORREO (LEZAMA)', url: 'https://rss.app/feeds/NQFfXxjeBxt2YjvZ.xml', enabled: true, useLogo: true, category: 'lezama' },
+        { id: 'deia_lezama', name: 'DEIA (LEZAMA)', url: 'https://rss.app/feeds/KpXyaKYYd8VOwqcX.xml', enabled: true, category: 'lezama' },
+        { id: 'cantera', name: 'LA CANTERA DE LEZAMA', url: 'https://rss.app/feeds/y29dkHHQdxhcPvdw.xml', enabled: true, category: 'lezama' },
+        { id: 'etb', name: 'ETB KIROLAK', url: 'https://rss.app/feeds/DXEgMiGIkrh2G0HS.xml', enabled: true, category: 'athletic' },
+        { id: 'marca', name: 'MARCA', url: 'https://e00-marca.uecdn.es/rss/futbol/athletic.xml', enabled: true, category: 'athletic' },
+        { id: 'as', name: 'DIARIO AS', url: 'https://rss.app/feeds/xVJ1LM9eQPJHmcsu.xml', enabled: true, category: 'athletic' },
+        { id: 'desmarque', name: 'EL DESMARQUE', url: 'https://rss.app/feeds/HDaRU3kWojOwqVVo.xml', enabled: true, category: 'athletic' },
+        { id: 'deia', name: 'DEIA', url: 'https://rss.app/feeds/xuSamSQmSS1gtFTM.xml', enabled: true, category: 'athletic' },
+        { id: 'naiz', name: 'NAIZ', url: 'https://www.naiz.eus/es/rss/sections/info/kirolak/futbola/athletic.rss', enabled: true, category: 'athletic' },
+        { id: 'mundo', name: 'MUNDO DEPORTIVO', url: 'https://www.mundodeportivo.com/feed/rss/futbol/athletic-bilbao', enabled: true, category: 'athletic' },
+        { id: 'futbolfantasy', name: 'FÚTBOL FANTASY', url: 'https://rss.app/feeds/lExVzxUUQvEGxXVv.xml', enabled: true, category: 'athletic' },
+        { id: 'estadiodeportivo', name: 'ESTADIO DEPORTIVO', url: 'https://rss.app/feeds/7NZl6eSHt9Qhq64C.xml', enabled: true, category: 'athletic' }
     ];
 
     let podcastSources = [
@@ -301,26 +316,29 @@
     ];
 
     let allNews = [], allPodcasts = [];
-    let activeNewsFilter = 'ALL', activePodcastFilter = 'ALL';
+    let activeNewsFilter = 'ALL', activePodcastFilter = 'ALL', activeCategory = 'athletic';
 
     function formatTime(dateStr) {
         const d = new Date(dateStr);
         if (isNaN(d)) return '';
-        
         const today = new Date();
         const yesterday = new Date();
         yesterday.setDate(today.getDate() - 1);
-
         const isToday = d.getDate() === today.getDate() && d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
         const isYesterday = d.getDate() === yesterday.getDate() && d.getMonth() === yesterday.getMonth() && d.getFullYear() === yesterday.getFullYear();
+        if (isToday) return d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        else if (isYesterday) return 'Ayer';
+        else return d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
+    }
 
-        if (isToday) {
-            return d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-        } else if (isYesterday) {
-            return 'Ayer';
-        } else {
-            return d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
-        }
+    function setCategory(cat) {
+        activeCategory = cat;
+        activeNewsFilter = 'ALL';
+        newsLimit = 20;
+        document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab-' + cat).classList.add('active');
+        renderNewsData();
+        renderNewsChips();
     }
 
     function showSection(id) {
@@ -332,14 +350,11 @@
             document.querySelectorAll(`[data-sec="${id}"]`).forEach(n => n.classList.add('active'));
             document.querySelectorAll(`.nav-link-h[onclick="showSection('${id}')"]`).forEach(n => n.classList.add('active'));
             localStorage.setItem('active_section', id);
-            
             document.getElementById('newsBoxSide').style.display = (id === 'titulares') ? 'block' : 'none';
             document.getElementById('podcastBoxSide').style.display = (id === 'podcasts') ? 'block' : 'none';
-            
             const isInicio = (id === 'titulares');
             document.getElementById('sidebarPartidos').style.display = isInicio ? 'block' : 'none';
             document.getElementById('sidebarClasificacion').style.display = isInicio ? 'block' : 'none';
-            
             if(id === 'titulares' && allNews.length === 0) updateNews();
             else if(id === 'podcasts' && allPodcasts.length === 0) updatePodcasts();
             window.scrollTo(0,0);
@@ -360,7 +375,6 @@
     async function updateNews(force = false) {
         const btn = document.getElementById('btnUpdateNews');
         if(force) { btn.innerText = "Actualizando..."; newsLimit = 20; }
-        
         const enabled = newsSources.filter(s => s.enabled);
         const results = await Promise.all(enabled.map(async s => {
             const xml = await fetchXML(s.url);
@@ -373,8 +387,6 @@
                     const mediaThumb = n.getElementsByTagNameNS("*", "thumbnail")[0] || n.querySelector('media\\:thumbnail');
                     const description = n.querySelector('description, summary')?.textContent || "";
                     const imgMatch = description.match(/<img[^>]+src="([^">]+)"/);
-                    
-                    // MEJORA: Prioridad de búsqueda de imagen
                     img = enclosure?.getAttribute('url') || mediaContent?.getAttribute('url') || mediaThumb?.getAttribute('url') || (imgMatch ? imgMatch[1] : null);
                 }
                 let link = n.querySelector('link')?.textContent || n.querySelector('link')?.getAttribute('href');
@@ -382,7 +394,7 @@
                 return { 
                     title: titleText.replace(/^(Athletic Club|Athletic|El Correo|Marca|Diario AS|As|Naiz|ETB Kirolak|ETB|Radio Popular|Berria|La Cantera de Lezama|Estadio Deportivo|Fútbol Fantasy|Futbol Fantasy|El Desmarque|Deia)\s*[:|]\s*/i, '').trim(), 
                     link, date: n.querySelector('pubDate, published, updated')?.textContent || new Date(), 
-                    image: img, source: s.name, isLogo: s.useLogo 
+                    image: img, source: s.name, isLogo: s.useLogo, category: s.category
                 };
             });
         }));
@@ -393,8 +405,12 @@
     }
 
     function renderNewsData() {
-        const enabledNames = newsSources.filter(s => s.enabled).map(s => s.name);
-        let filtered = allNews.filter(i => enabledNames.includes(i.source));
+        const enabledSources = newsSources.filter(s => s.enabled);
+        let filtered = allNews.filter(i => {
+            const srcObj = enabledSources.find(s => s.name === i.source);
+            if(!srcObj) return false;
+            return (activeCategory === 'athletic') ? (srcObj.category === 'athletic' || srcObj.category === 'both') : (srcObj.category === 'lezama' || srcObj.category === 'both');
+        });
         if (activeNewsFilter !== 'ALL') filtered = filtered.filter(i => i.source === activeNewsFilter);
         const visible = filtered.slice(0, newsLimit);
         document.getElementById('newsListHome').innerHTML = visible.map(i => createItemHTML(i)).join('');
@@ -407,7 +423,6 @@
         if(isPod) {
             return `<article class="story-group"><div><div class="item-meta"><b>${item.source}</b> · ${formatTime(item.date)}</div><h3 class="story-title"><a href="${item.link}" target="_blank">${item.title}</a></h3>${item.audio ? `<audio controls preload="none" src="${item.audio}"></audio>` : ''}</div></article>`;
         }
-        // MEJORA: Se añade onerror para poner logo por defecto si la imagen del medio falla
         return `<article class="story-group"><div class="story-main"><img src="${item.image || DEFAULT_IMG}" class="item-thumb ${item.isLogo ? 'is-logo' : ''}" onerror="this.src='${DEFAULT_IMG}'"><div><div class="item-meta"><b>${item.source}</b> · ${formatTime(item.date)}</div><h3 class="story-title"><a href="${item.link}" target="_blank">${item.title}</a></h3></div></div></article>`;
     }
 
@@ -445,7 +460,7 @@
     function loadMorePods() { podcastLimit += 20; renderPodcastsData(); }
 
     function renderNewsChips() {
-        const enabled = newsSources.filter(s => s.enabled);
+        const enabled = newsSources.filter(s => s.enabled && (s.category === activeCategory || s.category === 'both'));
         const html = [{name:'ALL', label:'TODAS'}, ...enabled].map(s => `<div class="chip ${activeNewsFilter === s.name ? 'active' : ''}" onclick="activeNewsFilter='${s.name}'; newsLimit=20; renderNewsData(); renderNewsChips();">${s.label || s.name}</div>`).join('');
         document.getElementById('newsChipsHome').innerHTML = html;
     }
@@ -508,9 +523,7 @@
     loadSavedPreferences();
     renderManagers();
 
-    // TEMPORIZADOR DE ACTUALIZACIÓN AUTOMÁTICA (CADA 60 SEGUNDOS)
     setInterval(() => {
-        console.log("Actualización automática ejecutada");
         updateNews();
         updatePodcasts();
     }, 60000); 
